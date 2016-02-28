@@ -6,7 +6,7 @@ from timesheet.utils.dot_dict import DotDict
 from tornado.httpclient import AsyncHTTPClient
 
 from timesheet.handlers.base_handler import BaseHandler
-from timesheet.utils.user_session import user_session
+from timesheet.utils.user_session import async_user_session
 
 __author__ = 'James Stidard'
 
@@ -19,12 +19,12 @@ class LogHandler(BaseHandler):
 
     BASE_URL  = "https://projectsapi.zoho.com/restapi"
 
-    @user_session
+    @async_user_session
     async def get(self, session, user):
         logs = session.query(Log).filter(Log.user_id == user.id).all()
         self.write([l.client_format for l in logs], format='json')
 
-    @user_session
+    @async_user_session
     async def post(self, session, user):
         log = Log(
             project_id=self.get_json_argument('project_id'),
@@ -46,7 +46,7 @@ class LogHandler(BaseHandler):
             session.commit()
             self.write(log.client_format, format='json')
 
-    @user_session
+    @async_user_session
     async def put(self, session, user):
         id  = self.get_json_argument('id')
         log = session.query(Log).filter(Log.user_id == user.id).get(id)
@@ -71,7 +71,7 @@ class LogHandler(BaseHandler):
         session.commit()
         self.write(log.client_format, format='json')
 
-    @user_session
+    @async_user_session
     async def delete(self, session, user):
         id  = self.get_argument('id')
         log = session.query(Log).filter(Log.user_id == user.id).get(id)

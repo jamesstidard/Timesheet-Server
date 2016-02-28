@@ -14,3 +14,14 @@ def user_session(f):
             result = f(self, session, user, *args, **kwargs)
         return result
     return call
+
+
+def async_user_session(f):
+    @wraps(f)
+    async def call(self, *args, **kwargs):
+        with self.control.session as session:
+            id     = self.get_current_user()
+            user   = session.query(User).get(id)
+            result = await f(self, session, user, *args, **kwargs)
+        return result
+    return call
