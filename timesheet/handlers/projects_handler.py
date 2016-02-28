@@ -3,13 +3,14 @@ import json
 from tornado.httpclient import AsyncHTTPClient
 from tornado.web import RequestHandler
 
+from timesheet.handlers.base_handler import BaseHandler
 from timesheet.utils.dot_dict import DotDict
 from timesheet.utils.user_session import user_session
 
 __author__ = 'James Stidard'
 
 
-class ProjectsHandler(RequestHandler):
+class ProjectsHandler(BaseHandler):
 
     BASE_URL  = "https://projectsapi.zoho.com/restapi"
 
