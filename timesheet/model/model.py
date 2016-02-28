@@ -115,8 +115,8 @@ class Log(Base):
         return self.project_id and self.task and self.start and self.end and self.billable
 
     @property
-    def json(self):
-        return json.dumps({
+    def client_format(self):
+        return {
                     'id': self.id,
             'project_id': self.project_id,
                   'task': self.task,
@@ -124,7 +124,7 @@ class Log(Base):
                    'end': to_unix_time(self.end),
               'billable': self.billable,
                  'notes': self.notes,
-        })
+        }
 
     @property
     def zoho_format(self):
