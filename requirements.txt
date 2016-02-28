@@ -1,0 +1,8 @@
+python-dotenv==0.3.0
+PyMySQL==0.7.2
+SQLAlchemy<2.0.0
+tornado<5.0
+flake8
+flake8-docstrings
+git+git://github.com/blueshed/blueshed-py.git#egg=blueshed
+git+git://github.com/OliverDashiell/utilise-py.git#egg=utilise
