@@ -1,4 +1,4 @@
-python-dotenv==0.3.0
+python-dotenv
 PyMySQL==0.7.2
 SQLAlchemy<2.0.0
 tornado<5.0

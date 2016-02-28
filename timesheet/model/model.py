@@ -45,6 +45,7 @@ class User(Base):
     id             = Column(Integer, primary_key=True)
     username       = Column(String(255))
     password       = Column(String(255))
+    token          = Column(String(255))
     portal_id      = Column(BigInteger)
     projects_token = Column(String(255))
     logs           = relationship('Log',
@@ -54,10 +55,19 @@ class User(Base):
                                   back_populates='user',
                                   cascade='all, delete-orphan')
 
-    def login(self, password: str):
+    def auth_password(self, password: str):
         success, updated_password = PWH.validate_password(self.password, password)
-        self.password             = updated_password if success else self.password
-        return success
+        if not success:
+            raise ValueError('Incorrect password')
+
+        self.password = updated_password
+
+    def auth_token(self, token: str):
+        success, updated_token = PWH.validate_token(self.token, token)
+        if not success:
+            raise ValueError('Incorrect token')
+
+        self.token = updated_token
 
     def change_password(self, old_password: str, new_password: str):
         success, self.password = PWH.change_password(self.password, old_password, new_password)
