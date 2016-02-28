@@ -1,0 +1,9 @@
+.idea
+__pycache__/
+venv
+jspm_packages
+node_modules
+.env
+*.pyc
+dist
+.cache/
