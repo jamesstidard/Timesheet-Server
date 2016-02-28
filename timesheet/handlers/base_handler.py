@@ -17,10 +17,10 @@ class BaseHandler(RequestHandler):
         try:
             return int(self.get_secure_cookie("user_id"))
         except TypeError:
-            user_id = self.request.headers.get('username')
-            token   = self.request.headers.get('token')
+            username = self.request.headers.get('username')
+            token    = self.request.headers.get('token')
             with self.control.session as session:
-                user = session.query(User).get(user_id)
+                user = session.query(User).filter(User.username == username).one()
                 user.auth_token(token)
                 session.commit()
                 return user.id
