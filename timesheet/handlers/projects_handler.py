@@ -18,7 +18,7 @@ class ProjectsHandler(BaseHandler):
     async def get(self, session, user):
         query  = self.get_argument('query', '')
         client = AsyncHTTPClient()
-        result = await client.fetch('{base_url}/portal/portal_id{}/projects/?authtoken={token}'.format(
+        result = await client.fetch('{base_url}/portal/{portal_id}/projects/?authtoken={token}'.format(
             base_url=self.BASE_URL,
             portal_id=user.portal_id,
             token=user.projects_token)
