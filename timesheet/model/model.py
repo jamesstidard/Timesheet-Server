@@ -3,7 +3,7 @@ import json
 from numbers import Integral
 from datetime import datetime
 
-from sqlalchemy.types import String, Text, Integer, Boolean, DateTime
+from sqlalchemy.types import String, Text, Integer, Boolean, DateTime, BigInteger
 from sqlalchemy.schema import Column, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative.api import declared_attr, has_inherited_table, declarative_base
@@ -45,7 +45,7 @@ class User(Base):
     id             = Column(Integer, primary_key=True)
     email          = Column(String(255))
     password       = Column(String(255))
-    portal_id      = Column(Integer)
+    portal_id      = Column(BigInteger)
     projects_token = Column(String(255))
     logs           = relationship('Log',
                                   uselist=True,
@@ -66,11 +66,11 @@ class User(Base):
 
 class Log(Base):
     id         = Column(Integer, primary_key=True)
-    zoho_id    = Column(Integer)
-    project_id = Column(Integer)
+    zoho_id    = Column(BigInteger)
+    project_id = Column(BigInteger)
     task       = Column(String(255))
-    start      = Column(DateTime, default=datetime.utcnow)
-    end        = Column(DateTime)
+    _start     = Column('start', DateTime, default=datetime.utcnow)
+    _end       = Column('end', DateTime)
     billable   = Column(Boolean, default=True)
     notes      = Column(Text)
     user_id    = Column(Integer, ForeignKey('user.id'))
@@ -81,18 +81,38 @@ class Log(Base):
                               back_populates='logs')
 
     def __init__(self, session=None, **kwargs):
-        for date_key in ['start', 'end']:
-            try: kwargs[date_key] = parse_unix_time(kwargs[date_key])
-            except Exception: pass
-
-        [self.__setattr__(k, v) for k, v in kwargs]
+        [self.__setattr__(k, v) for k, v in kwargs.items()]
 
         if session:
             session.add(self)
 
     @property
+    def start(self):
+        return self._start
+
+    @start.setter
+    def start(self, value):
+        try:
+            self._start = parse_unix_time(value)
+        except ValueError:
+            self._start = value
+            pass
+
+    @property
+    def end(self):
+        return self._end
+
+    @end.setter
+    def end(self, value):
+        try:
+            self._end = parse_unix_time(value)
+        except ValueError:
+            self._end = value
+            pass
+
+    @property
     def completed(self):
-        return True if self.end is not None else False
+        return self.project_id and self.task and self.start and self.end and self.billable
 
     @property
     def json(self):
@@ -107,15 +127,15 @@ class Log(Base):
         })
 
     @property
-    def zoho_json(self):
+    def zoho_format(self):
         delta   = self.end - self.start
         hours   = delta.seconds // 3600
         minutes = (delta.seconds // 60) % 60
 
-        return json.dumps({
+        return {
                    'name': self.task,
-                   'date': self.start.strftime('%m/%d/%Y'),
+                   'date': self.start.strftime('%m-%d-%Y'),
             'bill_status': 'Billable' if self.billable else 'Non Billable',
-                  'hours': '{}:{}'.format(hours, minutes),
+                  'hours': '{hours:02d}:{minutes:02d}'.format(hours=hours, minutes=minutes),
                   'notes': self.notes
-        })
+        }
