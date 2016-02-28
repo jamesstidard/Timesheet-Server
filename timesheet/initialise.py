@@ -31,7 +31,8 @@ def main():
 
     create_all(Base, control._engine)
 
-    for u in [{  "email": "james@stidard.com",
+    for u in [{
+              "username": "jamesstidard",
               "password": PWH.create_password("password"),
              "portal_id": 20557707,
         "projects_token": "c7a2105c8c9c8a23d27b0d839c6fbd76"}]:

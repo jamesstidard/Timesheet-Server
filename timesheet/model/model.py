@@ -43,7 +43,7 @@ Base = declarative_base(cls=_Base_)
 
 class User(Base):
     id             = Column(Integer, primary_key=True)
-    email          = Column(String(255))
+    username       = Column(String(255))
     password       = Column(String(255))
     portal_id      = Column(BigInteger)
     projects_token = Column(String(255))

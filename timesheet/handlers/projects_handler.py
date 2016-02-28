@@ -4,20 +4,24 @@ from tornado.httpclient import AsyncHTTPClient
 from tornado.web import RequestHandler
 
 from timesheet.utils.dot_dict import DotDict
+from timesheet.utils.user_session import user_session
 
 __author__ = 'James Stidard'
 
 
 class ProjectsHandler(RequestHandler):
-    BASE_URL  = "https://projectsapi.zoho.com/restapi"
-    PORTAL_ID = 20557707
-    API_TOKEN = "c7a2105c8c9c8a23d27b0d839c6fbd76"
 
-    async def get(self):
+    BASE_URL  = "https://projectsapi.zoho.com/restapi"
+
+    @user_session
+    async def get(self, session, user):
         query  = self.get_argument('query', '')
         client = AsyncHTTPClient()
-        url    = '{}/portal/{}/projects/?authtoken={}'.format(self.BASE_URL, self.PORTAL_ID, self.API_TOKEN)
-        result = await client.fetch(url)
+        result = await client.fetch('{base_url}/portal/portal_id{}/projects/?authtoken={token}'.format(
+            base_url=self.BASE_URL,
+            portal_id=user.portal_id,
+            token=user.projects_token)
+        )
 
         body     = json.loads(result.body.decode('utf-8'))
         projects = [DotDict(p) for p in body['projects']]

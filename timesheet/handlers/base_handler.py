@@ -11,14 +11,17 @@ class BaseHandler(RequestHandler):
     def control(self):
         return self.application.settings.get('control')
 
-    def write(self, chunk, format=None):
+    def get_current_user(self):
+        return int(self.get_secure_cookie("user_id"))
+
+    def write(self, chunk, format=''):
         if format.lower() == 'json':
             chunk = json.dumps(chunk)
         super().write(chunk)
 
     def prepare(self):
         if self.request.headers.get("Content-Type") == "application/json" and self.request.body != b'':
-            self.json_arguments = json.loads( self.request.body.decode('utf-8' ))
+            self.json_arguments = json.loads(self.request.body.decode('utf-8' ))
 
     _ARG_DEFAULT = []
 
