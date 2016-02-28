@@ -34,6 +34,7 @@ def main():
     for u in [{
               "username": "jamesstidard",
               "password": PWH.create_password("password"),
+                 "token": PWH.create_password("7b889db1-3018-4fe9-b842-350399e30bdb"),
              "portal_id": 20557707,
         "projects_token": "c7a2105c8c9c8a23d27b0d839c6fbd76"}]:
         user = User(**u)

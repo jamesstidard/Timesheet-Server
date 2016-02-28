@@ -14,13 +14,15 @@ class LoginHandler(BaseHandler):
         password = self.get_json_argument('password')
 
         with self.control.session as session:
-            user = session.query(User).filter(User.username == username).one()
-
-            if user.login(password):
+            try:
+                user = session.query(User).filter(User.username == username).one()
+                user.auth_password(password)
+                session.commit()
+            except ValueError:
+                raise HTTPInputError('Incorrect username or password')
+            else:
                 self.set_secure_cookie('user_id', str(user.id))
                 self.write('Success')
-            else:
-                raise HTTPInputError('Incorrect username or password')
 
     @user_session
     def delete(self, session, user):

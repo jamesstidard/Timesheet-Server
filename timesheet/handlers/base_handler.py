@@ -12,7 +12,18 @@ class BaseHandler(RequestHandler):
         return self.application.settings.get('control')
 
     def get_current_user(self):
-        return int(self.get_secure_cookie("user_id"))
+        try:
+            return int(self.get_secure_cookie("user_id"))
+        except TypeError
+            user_id = self.headers.get('auth_id')
+            token   = self.headers.get('auth_token')
+            with self.control.session as session:
+                user = session.query(User).get(user_id)
+                user.auth_token(token)
+                session.commit()
+                return user.id
+        except ValueError:
+            raise MissingArgumentError('Not already logged in or incorrect auth id and token provided')
 
     def write(self, chunk, format=''):
         if format.lower() == 'json':
