@@ -134,5 +134,5 @@ class LogHandler(BaseHandler):
             log_id=log.zoho_id,
             token=self.API_TOKEN,
         )
-        result = await client.fetch(url, method='POST', allow_nonstandard_methods=True)
+        result = await client.fetch(url, method='POST')
         assert result.code == 200
