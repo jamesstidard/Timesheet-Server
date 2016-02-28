@@ -63,7 +63,7 @@ class User(Base):
         self.password = updated_password
 
     def auth_token(self, token: str):
-        success, updated_token = PWH.validate_token(self.token, token)
+        success, updated_token = PWH.validate_password(self.token, token)
         if not success:
             raise ValueError('Incorrect token')
 

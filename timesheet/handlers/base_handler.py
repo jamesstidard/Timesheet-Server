@@ -2,6 +2,8 @@ import json
 
 from tornado.web import RequestHandler, MissingArgumentError
 
+from timesheet.model.model import User
+
 __author__ = 'James Stidard'
 
 
@@ -14,9 +16,9 @@ class BaseHandler(RequestHandler):
     def get_current_user(self):
         try:
             return int(self.get_secure_cookie("user_id"))
-        except TypeError
-            user_id = self.headers.get('auth_id')
-            token   = self.headers.get('auth_token')
+        except TypeError:
+            user_id = self.request.headers.get('username')
+            token   = self.request.headers.get('token')
             with self.control.session as session:
                 user = session.query(User).get(user_id)
                 user.auth_token(token)
