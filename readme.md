@@ -1,5 +1,4 @@
 # Zoho Timesheet
-----------------
 Wraps different hour logging endpoints from Zoho Support and Projects into a single service with a unified interface. (Current only Zoho Support).
 
 
@@ -10,7 +9,9 @@ Arguments are provided in the query tail for `GET` and `DELETE` requests. For bo
 
 Response body will always be a JSON result, unless the endpoint doesn't need to return - in which case it will return a UTF-8 string of 'Success'.
 
+
 #### Login `/v1/rpc/login`
+------------------------------
 This endpoint provides a authentication cookie to the client which can be used to authenticate subsequent requests.
 
 ##### `POST`
@@ -30,7 +31,9 @@ Success
 ##### `DELETE`
 Removes the cooking from the client.
 
+
 #### Projects `/v1/resources/projects`
+------------------------------
 Provides interface to user's projects which can have time logged against them.
 
 ##### `GET`
@@ -50,7 +53,9 @@ N/a
 ]
 ```
 
+
 #### Logs `/v1/resources/logs`
+------------------------------
 Provides an interface to the user's time logs for projects.
 
 ##### `GET`
@@ -83,7 +88,7 @@ Insert a new log entry for a project. Logs that meet minimum requirements of `pr
 | ---------  | :------: | :-----: | :-----: |
 | project_id | yes      | string  | N/a     |
 | task       | yes      | string  | N/a     |
-| start      | no       | number  | NOW()   |
+| start      | no       | number  | `NOW`   |
 | end        | no       | number  | null    |
 | billable   | no       | boolean | true    |
 | notes      | no       | string  | null    |
