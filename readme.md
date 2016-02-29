@@ -10,36 +10,36 @@ Arguments are provided in the query tail for `GET` and `DELETE` requests. For bo
 
 Response body will always be a JSON result, unless the endpoint doesn't need to return - in which case it will return a UTF-8 string of 'Success'.
 
-### Login `/v1/rpc/login`
+#### Login `/v1/rpc/login`
 This endpoint provides a authentication cookie to the client which can be used to authenticate subsequent requests.
 
-#### `POST`
+##### `POST`
 Provide username and password in exchange for authentication cookie.
 
-##### Request
+###### Request
 | Argument  | Required | Type   |
 | --------- | :------: | :----: |
 | username  | yes      | string |
 | password  | yes      | string |
 
-##### Response
+###### Response
 ```
 Success
 ```
 
-#### `DELETE`
+##### `DELETE`
 Removes the cooking from the client.
 
-### Projects `/v1/resources/projects`
+#### Projects `/v1/resources/projects`
 Provides interface to user's projects which can have time logged against them.
 
-#### `GET`
+##### `GET`
 Returns projects for user.
 
-##### Request
+###### Request
 N/a
 
-##### Response
+###### Response
 ```javascript
 [
     {
@@ -50,16 +50,16 @@ N/a
 ]
 ```
 
-### Logs `/v1/resources/logs`
+#### Logs `/v1/resources/logs`
 Provides an interface to the user's time logs for projects.
 
-#### `GET`
+##### `GET`
 Returns all the users time logs.
 
-##### Request
+###### Request
 N/a
 
-##### Response
+###### Response
 ```javascript
 [
     {
@@ -75,10 +75,10 @@ N/a
 ]
 ```
 
-#### `POST`
+##### `POST`
 Insert a new log entry for a project. Logs that meet minimum requirements of `project_id`, `task`, `start` and `end` will be submitted to Zoho. Otherwise they will be submitted once they are amended by a successive `PUT` which allows them to meet the minimum requirements.
 
-##### Request
+###### Request
 | Argument   | Required | Type    | Default |
 | ---------  | :------: | :-----: | :-----: |
 | project_id | yes      | string  | N/a     |
@@ -99,7 +99,7 @@ Insert a new log entry for a project. Logs that meet minimum requirements of `pr
 }
 ```
 
-##### Response
+###### Response
 ```javascript
 [
     {
@@ -115,10 +115,10 @@ Insert a new log entry for a project. Logs that meet minimum requirements of `pr
 ]
 ```
 
-#### `POST`
+##### `POST`
 Update an existing log entry with new values. If updating the record adds or removes the necessary components for it to be submitted to Zoho then the corrosonding Zoho record will be create/updated or deleted.
 
-##### Request
+###### Request
 | Argument   | Required | Type    |
 | ---------  | :------: | :-----: |
 | project_id | no       | number  |
@@ -139,7 +139,7 @@ Update an existing log entry with new values. If updating the record adds or rem
 }
 ```
 
-##### Response
+###### Response
 ```javascript
 {
             "id": 1,
@@ -152,15 +152,15 @@ Update an existing log entry with new values. If updating the record adds or rem
 }
 ```
 
-#### `DELETE`
+##### `DELETE`
 Deletes a record and it's corresponding Zoho record (if exists).
 
-##### Request
+###### Request
 | Argument   | Required | Type    |
 | ---------  | :------: | :-----: |
 | project_id | yes      | number  |
 
-##### Response
+###### Response
 ```
 Success
 ```
