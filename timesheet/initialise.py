@@ -31,12 +31,17 @@ def main():
 
     create_all(Base, control._engine)
 
-    for u in [{
-              "username": "jamesstidard",
-              "password": PWH.create_password("password"),
-                 "token": PWH.create_password("7b889db1-3018-4fe9-b842-350399e30bdb"),
-             "portal_id": 20557707,
-        "projects_token": "c7a2105c8c9c8a23d27b0d839c6fbd76"}]:
+    for u in [
+        {         "username": "james",
+                  "password": PWH.create_password("password"),
+                     "token": PWH.create_password("7b889db1-3018-4fe9-b842-350399e30bdb"),
+                 "portal_id": 20557707,
+            "projects_token": "c7a2105c8c9c8a23d27b0d839c6fbd76"},
+        {         "username": "dash",
+                  "password": PWH.create_password("Naringe.6811"),
+                     "token": PWH.create_password("76b61ecd-b18e-44e8-8252-a670f33ffc74"),
+                 "portal_id": 20557707,
+            "projects_token": "8bcd7346efd6ca1a4644c18c6a665772"},]:
         user = User(**u)
         session.add(user)
 
