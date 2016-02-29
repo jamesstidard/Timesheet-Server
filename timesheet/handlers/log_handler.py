@@ -29,7 +29,7 @@ class LogHandler(BaseHandler):
         log = Log(
             project_id=self.get_json_argument('project_id'),
             task=self.get_json_argument('task'),
-            start=self.get_json_argument('start'),
+            start=self.get_json_argument('start', None),
             end=self.get_json_argument('end', None),
             billable=self.get_json_argument('billable', True),
             notes=self.get_json_argument('notes', ''),
