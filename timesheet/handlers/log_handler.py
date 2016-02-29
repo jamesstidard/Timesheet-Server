@@ -65,7 +65,7 @@ class LogHandler(BaseHandler):
             try:
                 log.id = await LogHandler.update_zoho_log(log)
             except IncompleteLogException:
-                LogHandler.delete_zoho_log(log)
+                await LogHandler.delete_zoho_log(log)
                 pass
 
         session.commit()
@@ -77,7 +77,7 @@ class LogHandler(BaseHandler):
         log = session.query(Log).filter(Log.user_id == user.id).get(id)
 
         if log.zoho_id:
-            LogHandler.delete_zoho_log(log.zoho_id)
+            await LogHandler.delete_zoho_log(log.zoho_id)
 
         session.delete(log)
         session.commit()
