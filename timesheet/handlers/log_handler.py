@@ -77,7 +77,7 @@ class LogHandler(BaseHandler):
         log = session.query(Log).filter(Log.user_id == user.id).get(id)
 
         if log.zoho_id:
-            await LogHandler.delete_zoho_log(log.zoho_id)
+            await LogHandler.delete_zoho_log(log)
 
         session.delete(log)
         session.commit()
