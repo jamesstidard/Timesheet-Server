@@ -19,7 +19,7 @@ Provide username and password in exchange for authentication cookie.
 
 ###### Request
 | Argument  | Required | Type   |
-| --------- | :------: | :----: |
+| --------: | :------: | :----: |
 | username  | yes      | string |
 | password  | yes      | string |
 
@@ -40,7 +40,7 @@ Provides interface to user's projects which can have time logged against them.
 Returns projects for user.
 
 ###### Request
-N/a
+`n/a`
 
 ###### Response
 ```javascript
@@ -62,7 +62,7 @@ Provides an interface to the user's time logs for projects.
 Returns all the users time logs.
 
 ###### Request
-N/a
+`n/a`
 
 ###### Response
 ```javascript
@@ -85,9 +85,9 @@ Insert a new log entry for a project. Logs that meet minimum requirements of `pr
 
 ###### Request
 | Argument   | Required | Type    | Default |
-| ---------  | :------: | :-----: | :-----: |
-| project_id | yes      | string  | N/a     |
-| task       | yes      | string  | N/a     |
+| ---------: | :------: | :-----: | :-----: |
+| project_id | yes      | string  | `n/a`   |
+| task       | yes      | string  | `n/a`   |
 | start      | no       | number  | `NOW`   |
 | end        | no       | number  | null    |
 | billable   | no       | boolean | true    |
@@ -125,7 +125,7 @@ Update an existing log entry with new values. If updating the record adds or rem
 
 ###### Request
 | Argument   | Required | Type    |
-| ---------  | :------: | :-----: |
+| ---------: | :------: | :-----: |
 | project_id | no       | number  |
 | task       | no       | string  |
 | start      | no       | number  |
@@ -162,7 +162,7 @@ Deletes a record and it's corresponding Zoho record (if exists).
 
 ###### Request
 | Argument   | Required | Type    |
-| ---------  | :------: | :-----: |
+| ---------: | :------: | :-----: |
 | project_id | yes      | number  |
 
 ###### Response
