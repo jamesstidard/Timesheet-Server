@@ -1,0 +1,2 @@
+class IncompleteLogException(ValueError):
+    pass

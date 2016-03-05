@@ -2,7 +2,7 @@ import json
 
 from tornado.web import RequestHandler, MissingArgumentError
 
-from timesheet.model.model import User
+from timesheet.model.user import User
 
 __author__ = 'James Stidard'
 
@@ -34,7 +34,7 @@ class BaseHandler(RequestHandler):
 
     def prepare(self):
         if self.request.headers.get("Content-Type") == "application/json" and self.request.body != b'':
-            self.json_arguments = json.loads(self.request.body.decode('utf-8' ))
+            self.json_arguments = json.loads(self.request.body.decode('utf-8'))
 
     _ARG_DEFAULT = []
 

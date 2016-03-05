@@ -1,7 +1,7 @@
 from tornado.httputil import HTTPInputError
 
 from timesheet.handlers.base_handler import BaseHandler
-from timesheet.model.model import User
+from timesheet.model.user import User
 from timesheet.utils.user_session import user_session
 
 __author__ = 'James Stidard'

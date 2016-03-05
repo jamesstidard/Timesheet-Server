@@ -1,6 +1,6 @@
 from functools import wraps
 
-from timesheet.model.model import User
+from timesheet.model.user import User
 
 __author__ = 'James Stidard'
 

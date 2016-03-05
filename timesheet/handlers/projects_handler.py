@@ -1,10 +1,14 @@
 import json
+from itertools import chain
+from functools import singledispatch
 
-from tornado.httpclient import AsyncHTTPClient
+from tornado.gen import multi
 
 from timesheet.handlers.base_handler import BaseHandler
-from timesheet.utils.dot_dict import DotDict
 from timesheet.utils.user_session import async_user_session
+from timesheet.model import ZohoProjectsIntegration, ZohoSupportIntegration
+from timesheet.integrations.zoho.projects.control import get_projects as get_projects_projects
+from timesheet.integrations.zoho.support.control import get_projects as get_support_projects
 
 __author__ = 'James Stidard'
 
@@ -15,20 +19,29 @@ class ProjectsHandler(BaseHandler):
 
     @async_user_session
     async def get(self, session, user):
-        query  = self.get_argument('query', '')
-        client = AsyncHTTPClient()
-        result = await client.fetch('{base_url}/portal/{portal_id}/projects/?authtoken={token}'.format(
-            base_url=self.BASE_URL,
-            portal_id=user.portal_id,
-            token=user.projects_token)
-        )
+        query   = self.get_argument('query', '')
+        sources = [get_projects(i) for i in user.integrations]
+        results = await multi(sources)
 
-        body     = json.loads(result.body.decode('utf-8'))
-        projects = [DotDict(p) for p in body['projects']]
         projects = [{
-              'id': p.id,
+              'id': p.id,  # TODO: concat id with with support or projects prefix
             'name': p.name,
-        } for p in projects if query.lower() in p.name.lower()]
+        } for p in chain(*results) if query.lower() in p.name.lower()]
 
         result = json.dumps(projects)
         self.write(result)
+
+
+@singledispatch
+def get_projects(integration):
+    raise NotImplementedError()
+
+
+@get_projects.register(ZohoProjectsIntegration)
+def _(integration):
+    return get_projects_projects(integration)
+
+
+@get_projects.register(ZohoSupportIntegration)
+def _(integration):
+    return get_support_projects(integration)

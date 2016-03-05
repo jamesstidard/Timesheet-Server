@@ -7,22 +7,12 @@ from sqlalchemy.engine import reflection, create_engine
 from sqlalchemy.sql.schema import MetaData, ForeignKeyConstraint, Table
 from sqlalchemy.sql.ddl import DropConstraint, DropTable
 from sqlalchemy.orm.session import sessionmaker
-from sqlalchemy.sql.expression import and_, or_
-import os
+from sqlalchemy.types import UserDefinedType
 
 
 _SESSION_EXTENSIONS_ = []
 _SESSION_KWARGS_ = {"autoflush": False}
 _pool_recycle_ = 3600
-
-
-def overlaps(cls, from_date, to_date):
-    return or_(and_(cls.from_date <= to_date,  # starts
-                    cls.from_date >= from_date),
-               and_(cls.to_date <= to_date,  # ends
-                    cls.to_date >= from_date),
-               and_(cls.from_date <= from_date,  # spans
-                    cls.to_date >= to_date))
 
 
 def connect(db_url, echo=False, pool_recycle=None):
