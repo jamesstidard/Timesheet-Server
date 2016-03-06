@@ -2,7 +2,7 @@ import json
 
 from tornado.web import RequestHandler, MissingArgumentError
 
-from timesheet.model.model import User
+from timesheet.model.user import User
 
 __author__ = 'James Stidard'
 
@@ -27,22 +27,31 @@ class BaseHandler(RequestHandler):
         except ValueError:
             raise MissingArgumentError('Not already logged in or incorrect auth id and token provided')
 
-    def write(self, chunk, format=''):
-        if format.lower() == 'json':
-            chunk = json.dumps(chunk)
-        super().write(chunk)
+    def write(self, chunk):
+        super().write({
+            'result': chunk
+        })
 
     def prepare(self):
         if self.request.headers.get("Content-Type") == "application/json" and self.request.body != b'':
-            self.json_arguments = json.loads(self.request.body.decode('utf-8' ))
+            self.json_arguments = json.loads(self.request.body.decode('utf-8'))
 
-    _ARG_DEFAULT = []
 
-    def get_json_argument(self, name: str, default=_ARG_DEFAULT):
+    def get_json_argument(self, name: str, default=RequestHandler._ARG_DEFAULT):
         try:
             return self.json_arguments[name]
         except KeyError:
-            if default is self._ARG_DEFAULT:
+            if default is RequestHandler._ARG_DEFAULT:
+                raise MissingArgumentError(name)
+            else:
+                return default
+
+    def get_argument(self, name: str, default=RequestHandler._ARG_DEFAULT, strip: bool=True, cast: type=None):
+        try:
+            value = super().get_argument(name, strip=True)
+            return cast(value) if cast else value
+        except MissingArgumentError:
+            if default is RequestHandler._ARG_DEFAULT:
                 raise MissingArgumentError(name)
             else:
                 return default

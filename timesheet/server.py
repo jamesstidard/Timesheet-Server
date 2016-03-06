@@ -14,7 +14,7 @@ from timesheet.utils.orm_utils import heroku_db_url
 
 DEBUG_COOKIE = 'timesheet-secret-please-dont-guess'
 
-define("cookie_secret", DEBUG_COOKIE, str, help="key used to sign user cookies")
+define("cookie_secret", DEBUG_COOKIE, str, help="key used to sign cookies")
 define("debug", False, bool, help="run in debug mode")
 define("port", 8888, int, help="port to listen on")
 define("db_url", help="database url")
@@ -28,7 +28,7 @@ def main():
 
     secret = os.environ.get('COOKIE_SECRET', options.cookie_secret)
     debug  = os.environ.get("DEBUG", options.debug)
-    port   = int(os.environ.get("PORT", options.port))
+    port   = os.environ.get("PORT", options.port)
     db_url = os.environ.get("CLEARDB_DATABASE_URL", options.db_url)
     db_url = heroku_db_url(db_url)
 
@@ -48,7 +48,7 @@ def main():
     }
     application = Application(handlers, **settings)
 
-    application.listen(port)
+    application.listen(int(port))
     logging.info("db: %s", db_url)
     logging.info("listening on port %s", port)
     if debug:

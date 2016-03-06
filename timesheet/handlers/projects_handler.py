@@ -1,34 +1,32 @@
-import json
+from itertools import chain
 
-from tornado.httpclient import AsyncHTTPClient
+from tornado.gen import multi
+from fuzzywuzzy import fuzz
 
 from timesheet.handlers.base_handler import BaseHandler
-from timesheet.utils.dot_dict import DotDict
 from timesheet.utils.user_session import async_user_session
+from timesheet.dispatches.get_projects import get_projects
 
 __author__ = 'James Stidard'
 
 
 class ProjectsHandler(BaseHandler):
 
-    BASE_URL  = "https://projectsapi.zoho.com/restapi"
-
     @async_user_session
-    async def get(self, session, user):
-        query  = self.get_argument('query', '')
-        client = AsyncHTTPClient()
-        result = await client.fetch('{base_url}/portal/{portal_id}/projects/?authtoken={token}'.format(
-            base_url=self.BASE_URL,
-            portal_id=user.portal_id,
-            token=user.projects_token)
-        )
+    async def get(self, user, _):
+        query = self.get_argument('query', default='')
+        limit = self.get_argument('limit', default=None, cast=int)
 
-        body     = json.loads(result.body.decode('utf-8'))
-        projects = [DotDict(p) for p in body['projects']]
-        projects = [{
-              'id': p.id,
-            'name': p.name,
-        } for p in projects if query.lower() in p.name.lower()]
+        # Fetch projects from all user's integrations
+        sources  = (get_projects(i) for i in user.integrations)
+        results  = await multi(sources)
+        projects = chain(*results)
 
-        result = json.dumps(projects)
-        self.write(result)
+        # Sort by fuzzy string match score on project name and limit
+        def fuzzy_score(project):
+            return fuzz.partial_ratio(query, project.name)
+
+        projects = sorted(projects, key=fuzzy_score, reverse=True)
+        projects = projects[:limit]
+
+        self.write(projects)

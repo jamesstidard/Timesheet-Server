@@ -1,10 +1,8 @@
 from contextlib import contextmanager
 
 from blueshed.model_helpers.base_control import BaseControl
-from utilise.password_helper import PasswordHelper as PWH
 
 from timesheet.utils.orm_utils import connect
-from timesheet.model.model import User
 
 
 class Control(BaseControl):
@@ -34,11 +32,6 @@ class Control(BaseControl):
             for args in self._pending:
                 self._broadcast(*args)
         self._pending = []
-
-    def check_credentials(self, email, password):
-        with self.session as session:
-            user = session.query(User).filter(email=email).one()
-            return user.login(password)
 
     @property
     @contextmanager
