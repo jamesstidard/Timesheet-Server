@@ -1,8 +1,8 @@
 # Timesheet
-Unified endpoint for hours logging for multiple services, such as: Zoho Projects and Support.
+Unified endpoint for hours logging for multiple services, such as: Zoho Projects and Support. Zoho Support doesn't seem to allow time entry via it's API current... so that's on hold.
 
 ## General Architecture
-Wraps the API's of the provided integrations giving a unified REST-like API. Zoho Support doesn't seem to allow time entry via it's API current... so that's on hold.
+Wraps the API's of the provided integrations giving a unified REST-like API.
 
 A `User` has multiple `Integrations` and multiple `Logs`.
 
