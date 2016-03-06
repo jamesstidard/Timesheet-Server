@@ -5,6 +5,7 @@ from sqlalchemy.schema import Column, ForeignKey
 from sqlalchemy.orm import relationship
 
 from timesheet.model.base import Base
+from timesheet.model.log import Log
 
 
 class Integration(Base):
@@ -27,6 +28,10 @@ class Integration(Base):
                                  cascade='all, delete-orphan')
 
     __mapper_args__ = {'polymorphic_on': discriminator}
+
+    @classmethod
+    def Log(cls, **kwargs):
+        return Log(**kwargs)
 
     @property
     def maps(self):
