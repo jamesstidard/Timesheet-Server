@@ -1,15 +1,11 @@
-import json
 from itertools import chain
-from functools import singledispatch, partial
 
 from tornado.gen import multi
 from fuzzywuzzy import fuzz
 
 from timesheet.handlers.base_handler import BaseHandler
 from timesheet.utils.user_session import async_user_session
-from timesheet.model import ZohoProjectsIntegration, ZohoSupportIntegration
-from timesheet.integrations.zoho.projects.control import get_projects as get_projects_projects
-from timesheet.integrations.zoho.support.control import get_projects as get_support_projects
+from timesheet.dispatches.get_projects import get_projects
 
 __author__ = 'James Stidard'
 
@@ -27,23 +23,10 @@ class ProjectsHandler(BaseHandler):
         projects = chain(*results)
 
         # Sort by fuzzy string match score on project name and limit
-        fuzzy_score = partial(fuzz.ratio, query)
-        projects    = sorted(projects, key=fuzzy_score, reverse=True)
-        projects    = projects[:limit]
+        def fuzzy_score(project):
+            return fuzz.partial_ratio(query, project.name)
+
+        projects = sorted(projects, key=fuzzy_score, reverse=True)
+        projects = projects[:limit]
 
         self.write(projects)
-
-
-@singledispatch
-def get_projects(integration):
-    raise NotImplementedError()
-
-
-@get_projects.register(ZohoProjectsIntegration)
-def _(integration):
-    return get_projects_projects(integration)
-
-
-@get_projects.register(ZohoSupportIntegration)
-def _(integration):
-    return get_support_projects(integration)

@@ -40,7 +40,7 @@ class BaseHandler(RequestHandler):
     def get_json_argument(self, name: str, default=RequestHandler._ARG_DEFAULT):
         try:
             return self.json_arguments[name]
-        except MissingArgumentError:
+        except KeyError:
             if default is RequestHandler._ARG_DEFAULT:
                 raise MissingArgumentError(name)
             else:

@@ -19,6 +19,12 @@ class Integration(Base):
                                  primaryjoin='Integration.user_id==User.id',
                                  remote_side='User.id',
                                  back_populates='integrations')
+    logs          = relationship('Log',
+                                 uselist=True,
+                                 primaryjoin='Integration.id==Log.integration_id',
+                                 remote_side='Log.integration_id',
+                                 back_populates='integration',
+                                 cascade='all, delete-orphan')
 
     __mapper_args__ = {'polymorphic_on': discriminator}
 
