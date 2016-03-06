@@ -45,8 +45,8 @@ class LogHandler(BaseHandler):
 
     @async_user_session
     async def put(self, user, session):
-        id  = self.get_json_argument('id')
-        log = session.query(Log).filter(Log.user_id == user.id).get(id)
+        log_id = self.get_json_argument('id')
+        log    = session.query(Log).filter(Log.user_id == user.id, Log.id == log_id).one()
 
         for property_key in ['task', 'start', 'end', 'billable', 'notes']:
             if property_key in self.json_arguments:
@@ -55,12 +55,12 @@ class LogHandler(BaseHandler):
 
         if not log.zoho_id:
             try:
-                log.id = await insert_log(log)
+                log.zoho_id = await insert_log(log)
             except IncompleteLogException:
                 pass
         else:
             try:
-                log.id = await update_log(log)
+                log.zoho_id = await update_log(log)
             except IncompleteLogException:
                 await delete_log(log)
                 pass
@@ -70,8 +70,8 @@ class LogHandler(BaseHandler):
 
     @async_user_session
     async def delete(self, user, session):
-        id  = self.get_argument('id')
-        log = session.query(Log).filter(Log.user_id == user.id).get(id)
+        log_id = self.get_argument('id')
+        log    = session.query(Log).filter(Log.user_id == user.id, Log.id == log_id).one()
 
         if log.zoho_id:
             await delete_log(log)
