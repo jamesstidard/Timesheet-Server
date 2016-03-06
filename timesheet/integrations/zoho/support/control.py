@@ -47,49 +47,14 @@ def _unwrap_projects(result, mapping):
 
 @insert_log.register(ZohoSupportIntegration)
 async def insert_log(log):
-    client = AsyncHTTPClient()
-    query  = urlencode({
-        "authtoken": log.integration.token,
-        "portal": log.integration.portal_id,
-        "department": log.integration.department,
-        "xml": None
-    })
-    result = await client.fetch('{base_url}/addrecords?{query}'.format(
-        base_url=BASE_URL,
-        query=query
-    ))
-
-    return []
+    raise NotImplementedError()
 
 
 @update_log.register(ZohoSupportIntegration)
 async def update_log(log):
-    client = AsyncHTTPClient()
-    query  = urlencode({
-        "authtoken": log.integration.token,
-        "portal": log.integration.portal_id,
-        "department": log.integration.department,
-        "xml": None,
-        "id": log.zoho_id
-    })
-    result = await client.fetch('{base_url}/updaterecords?{query}'.format(
-        base_url=BASE_URL,
-        query=query
-    ))
-    return []
+    raise NotImplementedError()
 
 
 @delete_log.register(ZohoSupportIntegration)
 async def delete_log(log):
-    client = AsyncHTTPClient()
-    query  = urlencode({
-        "authtoken": log.integration.token,
-        "portal": log.integration.portal_id,
-        "department": log.integration.department,
-        "id": log.zoho_id
-    })
-    result = await client.fetch('{base_url}/deleterecords?{query}'.format(
-        base_url=BASE_URL,
-        query=query
-    ))
-    return []
+    raise NotImplementedError()
