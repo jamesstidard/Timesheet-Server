@@ -11,12 +11,12 @@ __author__ = 'James Stidard'
 class LogHandler(BaseHandler):
 
     @async_user_session
-    async def get(self, session, user):
+    async def get(self, user, session):
         logs = session.query(ZohoProjectsLog).filter(ZohoProjectsLog.user_id == user.id).all()
         self.write([l.client_format for l in logs], format='json')
 
     @async_user_session
-    async def post(self, session, user):
+    async def post(self, user, session):
         log = ZohoProjectsLog(
             project_id=self.get_json_argument('project_id'),
             task=self.get_json_argument('task'),
@@ -35,10 +35,10 @@ class LogHandler(BaseHandler):
             pass
         else:
             session.commit()
-            self.write(log.integration_format, format='json')
+            self.write(log.integration_format)
 
     @async_user_session
-    async def put(self, session, user):
+    async def put(self, user, session):
         id  = self.get_json_argument('id')
         log = session.query(ZohoProjectsLog).filter(ZohoProjectsLog.user_id == user.id).get(id)
 
@@ -60,10 +60,10 @@ class LogHandler(BaseHandler):
                 pass
 
         session.commit()
-        self.write(log.client_format, format='json')
+        self.write(log.client_format)
 
     @async_user_session
-    async def delete(self, session, user):
+    async def delete(self, user, session):
         id  = self.get_argument('id')
         log = session.query(ZohoProjectsLog).filter(ZohoProjectsLog.user_id == user.id).get(id)
 
@@ -73,4 +73,4 @@ class LogHandler(BaseHandler):
         session.delete(log)
         session.commit()
 
-        self.write("Success")
+        self.write('Success')

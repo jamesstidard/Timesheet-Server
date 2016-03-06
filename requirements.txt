@@ -2,6 +2,8 @@ python-dotenv
 PyMySQL==0.7.2
 SQLAlchemy<2.0.0
 tornado<5.0
+python-Levenshtein
+fuzzywuzzy<1.0
 flake8
 flake8-docstrings
 pytest

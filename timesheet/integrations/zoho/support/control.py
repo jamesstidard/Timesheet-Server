@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlencode
 
 from tornado.httpclient import AsyncHTTPClient
 
@@ -35,13 +36,48 @@ def _unwrap_projects(result, mapping):
     return [{mapping[kv['val']]: kv['content'] for kv in c['fl'] if kv['val'] in mapping} for c in cases]
 
 
-async def insert_ticket_log(log):
+async def insert_ticket_log(log, integration):
+    client = AsyncHTTPClient()
+    query  = urlencode({
+        "authtoken": integration.token,
+        "portal": integration.portal_id,
+        "department": integration.department,
+        "xml": None
+    })
+    result = await client.fetch('{base_url}/addrecords?{query}'.format(
+        base_url=BASE_URL,
+        query=query
+    ))
+
     return []
 
 
-async def update_ticket_log(log):
+async def update_ticket_log(log, integration):
+    client = AsyncHTTPClient()
+    query  = urlencode({
+        "authtoken": integration.token,
+        "portal": integration.portal_id,
+        "department": integration.department,
+        "xml": None,
+        "id": log.zoho_id
+    })
+    result = await client.fetch('{base_url}/updaterecords?{query}'.format(
+        base_url=BASE_URL,
+        query=query
+    ))
     return []
 
 
-async def delete_ticket_log(log):
+async def delete_ticket_log(log, integration):
+    client = AsyncHTTPClient()
+    query  = urlencode({
+        "authtoken": integration.token,
+        "portal": integration.portal_id,
+        "department": integration.department,
+        "id": log.zoho_id
+    })
+    result = await client.fetch('{base_url}/deleterecords?{query}'.format(
+        base_url=BASE_URL,
+        query=query
+    ))
     return []

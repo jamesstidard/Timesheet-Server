@@ -20,8 +20,10 @@ async def get_projects(integration):
         token=integration.token)
     )
 
-    body   = json.loads(result.body.decode('utf-8'))
-    result = [DotDict(p) for p in body['projects']]
+    body    = json.loads(result.body.decode('utf-8'))
+    mapping = integration.maps.get('project')
+    result  = [{mapping.get(key): value for key, value in p.items() if key in mapping} for p in body['projects']]
+    result  = [DotDict(p) for p in result]
 
     for p in result:
         p['integration_id'] = integration.id
