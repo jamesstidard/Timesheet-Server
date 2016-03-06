@@ -5,6 +5,9 @@ from functools import singledispatch
 from tornado.httpclient import AsyncHTTPClient
 
 from timesheet.dispatches.get_projects import get_projects
+from timesheet.dispatches.insert_log import insert_log
+from timesheet.dispatches.update_log import update_log
+from timesheet.dispatches.delete_log import delete_log
 from timesheet.integrations.zoho.support.integration import ZohoSupportIntegration
 from timesheet.utils.dot_dict import DotDict
 from timesheet.utils.log_exceptions import IncompleteLogException
@@ -42,7 +45,8 @@ def _unwrap_projects(result, mapping):
     return [{mapping[kv['val']]: kv['content'] for kv in c['fl'] if kv['val'] in mapping} for c in cases]
 
 
-async def insert_ticket_log(log):
+@insert_log.register(ZohoSupportIntegration)
+async def insert_log(log):
     client = AsyncHTTPClient()
     query  = urlencode({
         "authtoken": log.integration.token,
@@ -58,7 +62,8 @@ async def insert_ticket_log(log):
     return []
 
 
-async def update_ticket_log(log):
+@update_log.register(ZohoSupportIntegration)
+async def update_log(log):
     client = AsyncHTTPClient()
     query  = urlencode({
         "authtoken": log.integration.token,
@@ -74,7 +79,8 @@ async def update_ticket_log(log):
     return []
 
 
-async def delete_ticket_log(log):
+@delete_log.register(ZohoSupportIntegration)
+async def delete_log(log):
     client = AsyncHTTPClient()
     query  = urlencode({
         "authtoken": log.integration.token,

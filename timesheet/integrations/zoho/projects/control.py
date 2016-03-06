@@ -5,6 +5,9 @@ from functools import singledispatch
 from tornado.httpclient import AsyncHTTPClient
 
 from timesheet.dispatches.get_projects import get_projects
+from timesheet.dispatches.insert_log import insert_log
+from timesheet.dispatches.update_log import update_log
+from timesheet.dispatches.delete_log import delete_log
 from timesheet.integrations.zoho.projects.integration import ZohoProjectsIntegration
 from timesheet.utils.dot_dict import DotDict
 from timesheet.utils.log_exceptions import IncompleteLogException
@@ -35,7 +38,8 @@ async def get_projects(integration):
     return result
 
 
-async def insert_project_log(log):
+@insert_log.register(ZohoProjectsIntegration)
+async def insert_log(log):
     if not log.completed:
         raise IncompleteLogException('Incomplete log entry. Cannot be submitted to Zoho.')
 
@@ -56,7 +60,8 @@ async def insert_project_log(log):
     return zoho_log.id
 
 
-async def update_project_log(log):
+@update_log.register(ZohoProjectsIntegration)
+async def update_log(log):
     if not log.completed:
         raise IncompleteLogException('Incomplete log entry. Cannot be submitted to Zoho.')
 
@@ -78,7 +83,8 @@ async def update_project_log(log):
     return zoho_log.id
 
 
-async def delete_project_log(log):
+@delete_log.register(ZohoProjectsIntegration)
+async def delete_log(log):
     client = AsyncHTTPClient()
     url    = '{base_url}/portal/{portal_id}/projects/{project_id}/logs/{log_id}?authtoken={token}&{item}'.format(
         base_url=BASE_URL,
