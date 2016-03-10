@@ -1,6 +1,5 @@
 import json
 from urllib.parse import urlencode
-from functools import singledispatch
 
 from tornado.httpclient import AsyncHTTPClient
 
