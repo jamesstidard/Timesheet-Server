@@ -22,8 +22,7 @@ class LogHandler(BaseHandler):
         integration_id = self.get_json_argument('integration_id')
         integration    = session.query(Integration)\
                                 .filter(Integration.user_id == user.id,
-                                        Integration.id == integration_id)\
-                                .one()
+                                        Integration.id == integration_id).one()
 
         log = integration.Log(
             project_id=self.get_json_argument('project_id'),
@@ -51,8 +50,7 @@ class LogHandler(BaseHandler):
         log_id = self.get_json_argument('id')
         log    = session.query(Log)\
                         .filter(Log.user_id == user.id,
-                                Log.id == log_id)\
-                        .one()
+                                Log.id == log_id).one()
 
         for property_key in ['task', 'start', 'end', 'billable', 'notes']:
             if property_key in self.json_arguments:
@@ -79,8 +77,7 @@ class LogHandler(BaseHandler):
         log_id = self.get_argument('id')
         log    = session.query(Log)\
                         .filter(Log.user_id == user.id,
-                                Log.id == log_id)\
-                        .one()
+                                Log.id == log_id).one()
 
         if log.zoho_id:
             await delete_log(log)

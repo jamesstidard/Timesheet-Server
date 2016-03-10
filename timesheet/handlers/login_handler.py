@@ -16,8 +16,7 @@ class LoginHandler(BaseHandler):
         with self.control.session as session:
             try:
                 user = session.query(User)\
-                              .filter(User.username == username)\
-                              .one()
+                              .filter(User.username == username).one()
                 user.auth_password(password)
                 session.commit()
             except ValueError:
