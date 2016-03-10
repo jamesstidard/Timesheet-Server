@@ -3,9 +3,9 @@ from timesheet.model.integration import Integration
 from timesheet.handlers.base_handler import BaseHandler
 from timesheet.utils.user_session import async_user_session
 from timesheet.utils.log_exceptions import IncompleteLogException
-from timesheet.dispaches.insert_log import insert_log
-from timesheet.dispaches.update_log import update_log
-from timesheet.dispaches.delete_log import delete_log
+from timesheet.dispatches.insert_log import insert_log
+from timesheet.dispatches.update_log import update_log
+from timesheet.dispatches.delete_log import delete_log
 
 __author__ = 'James Stidard'
 
