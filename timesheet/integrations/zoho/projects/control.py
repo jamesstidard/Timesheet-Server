@@ -1,6 +1,5 @@
 import json
 from urllib.parse import urlencode
-from functools import singledispatch
 
 from tornado.httpclient import AsyncHTTPClient
 
@@ -24,8 +23,8 @@ async def get_projects(integration):
     result = await client.fetch('{base_url}/portal/{portal_id}/projects/?authtoken={token}'.format(
         base_url=BASE_URL,
         portal_id=integration.portal_id,
-        token=integration.token)
-    )
+        token=integration.token
+    ))
 
     body    = json.loads(result.body.decode('utf-8'))
     mapping = integration.maps.get('project')
@@ -41,7 +40,8 @@ async def get_projects(integration):
 @insert_log.register(ZohoProjectsIntegration)
 async def insert_log(log):
     if not log.completed:
-        raise IncompleteLogException('Incomplete log entry. Cannot be submitted to Zoho.')
+        raise IncompleteLogException('Incomplete log entry. \
+                                      Cannot be submitted to Zoho.')
 
     client = AsyncHTTPClient()
     item   = urlencode(log.integration_format)
@@ -63,7 +63,8 @@ async def insert_log(log):
 @update_log.register(ZohoProjectsIntegration)
 async def update_log(log):
     if not log.completed:
-        raise IncompleteLogException('Incomplete log entry. Cannot be submitted to Zoho.')
+        raise IncompleteLogException('Incomplete log entry. \
+                                      Cannot be submitted to Zoho.')
 
     client = AsyncHTTPClient()
     item   = urlencode(log.integration_format)

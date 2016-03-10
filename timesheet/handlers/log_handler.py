@@ -3,9 +3,9 @@ from timesheet.model.integration import Integration
 from timesheet.handlers.base_handler import BaseHandler
 from timesheet.utils.user_session import async_user_session
 from timesheet.utils.log_exceptions import IncompleteLogException
-from timesheet.dispaches.insert_log import insert_log
-from timesheet.dispaches.update_log import update_log
-from timesheet.dispaches.delete_log import delete_log
+from timesheet.dispatches.insert_log import insert_log
+from timesheet.dispatches.update_log import update_log
+from timesheet.dispatches.delete_log import delete_log
 
 __author__ = 'James Stidard'
 
@@ -20,7 +20,10 @@ class LogHandler(BaseHandler):
     @async_user_session
     async def post(self, user, session):
         integration_id = self.get_json_argument('integration_id')
-        integration    = session.query(Integration).filter(Integration.user_id == user.id, Integration.id == integration_id).one()
+        integration    = session.query(Integration)\
+                                .filter(Integration.user_id == user.id,
+                                        Integration.id == integration_id)\
+                                .one()
 
         log = integration.Log(
             project_id=self.get_json_argument('project_id'),
@@ -46,7 +49,10 @@ class LogHandler(BaseHandler):
     @async_user_session
     async def put(self, user, session):
         log_id = self.get_json_argument('id')
-        log    = session.query(Log).filter(Log.user_id == user.id, Log.id == log_id).one()
+        log    = session.query(Log)\
+                        .filter(Log.user_id == user.id,
+                                Log.id == log_id)\
+                        .one()
 
         for property_key in ['task', 'start', 'end', 'billable', 'notes']:
             if property_key in self.json_arguments:
@@ -71,7 +77,10 @@ class LogHandler(BaseHandler):
     @async_user_session
     async def delete(self, user, session):
         log_id = self.get_argument('id')
-        log    = session.query(Log).filter(Log.user_id == user.id, Log.id == log_id).one()
+        log    = session.query(Log)\
+                        .filter(Log.user_id == user.id,
+                                Log.id == log_id)\
+                        .one()
 
         if log.zoho_id:
             await delete_log(log)

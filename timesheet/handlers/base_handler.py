@@ -20,12 +20,15 @@ class BaseHandler(RequestHandler):
             username = self.request.headers.get('username')
             token    = self.request.headers.get('token')
             with self.control.session as session:
-                user = session.query(User).filter(User.username == username).one()
+                user = session.query(User)\
+                              .filter(User.username == username)\
+                              .one()
                 user.auth_token(token)
                 session.commit()
                 return user.id
         except ValueError:
-            raise MissingArgumentError('Not already logged in or incorrect auth id and token provided')
+            raise MissingArgumentError('Not already logged in or incorrect\
+                                        auth id and token provided.')
 
     def write(self, chunk):
         super().write({
@@ -33,11 +36,14 @@ class BaseHandler(RequestHandler):
         })
 
     def prepare(self):
-        if self.request.headers.get("Content-Type") == "application/json" and self.request.body != b'':
+        content_type = self.request.headers.get('Content-Type')
+
+        if content_type == 'application/json' and self.request.body != b'':
             self.json_arguments = json.loads(self.request.body.decode('utf-8'))
 
-
-    def get_json_argument(self, name: str, default=RequestHandler._ARG_DEFAULT):
+    def get_json_argument(self,
+                          name: str,
+                          default=RequestHandler._ARG_DEFAULT):
         try:
             return self.json_arguments[name]
         except KeyError:
@@ -46,7 +52,11 @@ class BaseHandler(RequestHandler):
             else:
                 return default
 
-    def get_argument(self, name: str, default=RequestHandler._ARG_DEFAULT, strip: bool=True, cast: type=None):
+    def get_argument(self,
+                     name: str,
+                     default=RequestHandler._ARG_DEFAULT,
+                     strip: bool=True,
+                     cast: type=None):
         try:
             value = super().get_argument(name, strip=True)
             return cast(value) if cast else value
