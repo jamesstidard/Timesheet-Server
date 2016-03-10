@@ -11,6 +11,7 @@ class ZohoSupportIntegration(HasRegion, HasPortal, Integration):
     __mapper_args__ = {'polymorphic_identity': 'Zoho Support'}
 
     department = Column(String(255))
+    agent_name = Column(String(255))
 
     @classmethod
     def Log(cls, **kwargs):
