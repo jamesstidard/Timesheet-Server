@@ -42,7 +42,8 @@ async def get_projects(integration):
 @insert_log.register(ZohoSupportIntegration)
 async def insert_log(log):
     if not log.completed:
-        raise IncompleteLogException('Incomplete log entry. Cannot be submitted to Zoho.')
+        raise IncompleteLogException('Incomplete log entry. \
+                                      Cannot be submitted to Zoho.')
 
     client = AsyncHTTPClient()
     result = await client.fetch('{base_url}/timeentry/addrecords?authtoken={token}&department={department}&portal={portal}&xml={item}'.format(
@@ -61,7 +62,8 @@ async def insert_log(log):
 @update_log.register(ZohoSupportIntegration)
 async def update_log(log):
     if not log.completed:
-        raise IncompleteLogException('Incomplete log entry. Cannot be submitted to Zoho.')
+        raise IncompleteLogException('Incomplete log entry. \
+                                      Cannot be submitted to Zoho.')
 
     client = AsyncHTTPClient()
     result = await client.fetch('{base_url}/timeentry/addrecords?authtoken={token}&department={department}&portal={portal}&xml={item}&id={log_id}'.format(

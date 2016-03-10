@@ -30,4 +30,9 @@ class ZohoSupportLog(ZohoResource, Log):
 
         @property
         def completed(self):
-            return self.project_id and self.task and self.start and self.end
+            return all([
+                self.project_id,
+                self.task,
+                self.start,
+                self.end
+            ])

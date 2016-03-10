@@ -1,5 +1,5 @@
 """
-Created on 27 Oct 2015
+Created on 27 Oct 2015.
 
 @author: peterb
 """
@@ -7,7 +7,7 @@ Created on 27 Oct 2015
 
 class DotDict(dict):
     """
-        A dict that allows for object-like property access syntax.
+    A dict that allows for object-like property access syntax.
     """
 
     def __getattr__(self, name):
