@@ -2,7 +2,7 @@ import json
 
 from tornado.web import RequestHandler, MissingArgumentError
 
-from timesheet.model.user import User
+from timesheet.model.token import Token
 
 __author__ = 'James Stidard'
 
@@ -17,18 +17,19 @@ class BaseHandler(RequestHandler):
         try:
             return int(self.get_secure_cookie("user_id"))
         except TypeError:
-            username = self.request.headers.get('username')
-            token    = self.request.headers.get('token')
-            with self.control.session as session:
-                user = session.query(User)\
-                              .filter(User.username == username)\
-                              .one()
-                user.auth_token(token)
-                session.commit()
-                return user.id
-        except ValueError:
-            raise MissingArgumentError('Not already logged in or incorrect\
-                                        auth id and token provided.')
+            try:
+                token_id     = self.request.headers.get('token_id')
+                token_secret = self.request.headers.get('token_secret')
+                with self.control.session as session:
+                    token = session.query(Token)\
+                                   .filter(Token.id == token_id)\
+                                   .one()
+                    token.auth_token(token_secret)
+                    session.commit()
+                    return token.user_id
+            except ValueError:
+                raise MissingArgumentError('Not already logged in or incorrect\
+                                            auth id and token provided.')
 
     def write(self, chunk):
         super().write({

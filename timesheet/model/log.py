@@ -5,6 +5,7 @@ from sqlalchemy.types import String, Text, Integer, DateTime, BigInteger
 from sqlalchemy.orm import relationship
 
 from timesheet.model.base import Base
+from timesheet.model.custom_types.uuid import UUID
 from timesheet.utils.date_helpers import parse_unix_time, to_unix_time
 
 
@@ -22,7 +23,7 @@ class Log(Base):
                                   primaryjoin='Log.integration_id==Integration.id',
                                   remote_side='Integration.id',
                                   back_populates='logs')
-    user_id        = Column(Integer, ForeignKey('user.id'))
+    user_id        = Column(UUID, ForeignKey('user.id'))
     user           = relationship('User',
                                   uselist=False,
                                   primaryjoin='Log.user_id==User.id',

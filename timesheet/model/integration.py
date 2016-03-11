@@ -4,6 +4,7 @@ from sqlalchemy.types import String, Integer, Text
 from sqlalchemy.schema import Column, ForeignKey
 from sqlalchemy.orm import relationship
 
+from timesheet.model.custom_types.uuid import UUID
 from timesheet.model.base import Base
 from timesheet.model.log import Log
 
@@ -14,7 +15,7 @@ class Integration(Base):
     name          = Column(String(255))
     token         = Column(String(255))
     _maps         = Column('maps', Text)
-    user_id       = Column(Integer, ForeignKey('user.id'))
+    user_id       = Column(UUID, ForeignKey('user.id'))
     user          = relationship('User',
                                  uselist=False,
                                  primaryjoin='Integration.user_id==User.id',
