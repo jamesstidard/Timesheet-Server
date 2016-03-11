@@ -30,7 +30,7 @@ async def update_log(log):
     )
 
     result = await client.fetch(url, method='POST', allow_nonstandard_methods=True)
-    body = json.loads(result.body.decode('utf-8'))
+    body   = json.loads(result.body.decode('utf-8'))
 
     zoho_log = DotDict(body['timelogs']['generallogs'][0])
     return zoho_log.id

@@ -26,7 +26,7 @@ async def update_log(log):
         log_id=log.zoho_id
     ))
 
-    result  = result.body.decode('utf-8')
-    result  = json.loads(result)
+    result = result.body.decode('utf-8')
+    result = json.loads(result)
 
     return result['response']['result']['responsedata']['TimeEntry']['record']['id']

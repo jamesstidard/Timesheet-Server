@@ -8,7 +8,7 @@ class ZohoProjectsLog(Log):
     __tablename__   = None
     __mapper_args__ = {'polymorphic_identity': 'Zoho Project Log'}
 
-    billable      = Column(Boolean, default=True)
+    billable = Column(Boolean, default=True)
 
     @property
     def integration_format(self):

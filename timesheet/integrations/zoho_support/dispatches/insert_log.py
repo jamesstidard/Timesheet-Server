@@ -25,7 +25,7 @@ async def insert_log(log):
         item=wrap_logs(log)
     ))
 
-    result  = result.body.decode('utf-8')
-    result  = json.loads(result)
+    result = result.body.decode('utf-8')
+    result = json.loads(result)
 
     return result['response']['result']['responsedata']['TimeEntry']['record']['id']
