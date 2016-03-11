@@ -3,9 +3,9 @@ import json
 from tornado.httpclient import AsyncHTTPClient
 
 from timesheet.dispatches.insert_log import insert_log
-from timesheet.integrations.zoho.support.integration import ZohoSupportIntegration
-from timesheet.integrations.zoho.support.utils import wrap_logs
-from timesheet.integrations.zoho.support.utils import BASE_URL
+from timesheet.integrations.zoho_support.integration import ZohoSupportIntegration
+from timesheet.integrations.zoho_support.utils import wrap_logs
+from timesheet.integrations.zoho_support.utils import BASE_URL
 from timesheet.utils.log_exceptions import IncompleteLogException
 
 __author__ = 'James Stidard'

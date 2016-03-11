@@ -3,9 +3,9 @@ import json
 from tornado.httpclient import AsyncHTTPClient
 
 from timesheet.dispatches.get_projects import get_projects
-from timesheet.integrations.zoho.support.integration import ZohoSupportIntegration
-from timesheet.integrations.zoho.support.utils import unwrap_projects
-from timesheet.integrations.zoho.support.utils import BASE_URL
+from timesheet.integrations.zoho_support.integration import ZohoSupportIntegration
+from timesheet.integrations.zoho_support.utils import unwrap_projects
+from timesheet.integrations.zoho_support.utils import BASE_URL
 from timesheet.utils.dot_dict import DotDict
 
 __author__ = 'James Stidard'

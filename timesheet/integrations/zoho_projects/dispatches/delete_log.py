@@ -1,8 +1,8 @@
 from tornado.httpclient import AsyncHTTPClient
 
 from timesheet.dispatches.delete_log import delete_log
-from timesheet.integrations.zoho.projects.integration import ZohoProjectsIntegration
-from timesheet.integrations.zoho.projects.utils import BASE_URL
+from timesheet.integrations.zoho_projects.integration import ZohoProjectsIntegration
+from timesheet.integrations.zoho_projects.utils import BASE_URL
 
 __author__ = 'James Stidard'
 

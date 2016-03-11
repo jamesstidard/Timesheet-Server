@@ -4,8 +4,8 @@ from urllib.parse import urlencode
 from tornado.httpclient import AsyncHTTPClient
 
 from timesheet.dispatches.update_log import update_log
-from timesheet.integrations.zoho.projects.integration import ZohoProjectsIntegration
-from timesheet.integrations.zoho.projects.utils import BASE_URL
+from timesheet.integrations.zoho_projects.integration import ZohoProjectsIntegration
+from timesheet.integrations.zoho_projects.utils import BASE_URL
 from timesheet.utils.log_exceptions import IncompleteLogException
 from timesheet.utils.dot_dict import DotDict
 
