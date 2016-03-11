@@ -1,3 +1,7 @@
+__author__ = 'James Stidard'
+
+
+BASE_URL = 'https://support.zoho.com/api/json'
 
 
 def unwrap_projects(result, mapping):
