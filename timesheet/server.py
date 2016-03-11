@@ -32,8 +32,8 @@ def main():
     db_url = os.environ.get("CLEARDB_DATABASE_URL", options.db_url)
     db_url = heroku_db_url(db_url)
 
-    if not debug:
-        assert(secret != DEBUG_COOKIE)
+    if not debug and secret == DEBUG_COOKIE:
+        raise ValueError('Trying to use debug cookie for production.')
 
     handlers = [
         (r"/v1/rpc/login/?", LoginHandler),
