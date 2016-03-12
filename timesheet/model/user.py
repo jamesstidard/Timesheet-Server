@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy.types import String
+from sqlalchemy.types import String, Text
 from sqlalchemy.schema import Column
 from sqlalchemy.orm import relationship
 
@@ -12,8 +12,9 @@ from timesheet.model.custom_types.uuid import UUID
 
 class User(Base):
     id           = Column(UUID, primary_key=True, default=uuid.uuid4)
-    username     = Column(String(255))
-    password     = Column(String(255))
+    username     = Column(String(255), nullable=False, unique=True)
+    password     = Column(String(255), nullable=False)
+    settings     = Column(Text, nullable=False, default="\{\}")
     tokens       = relationship('Token',
                                 uselist=True,
                                 primaryjoin='User.id==Token.user_id',

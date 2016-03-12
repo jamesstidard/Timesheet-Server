@@ -11,8 +11,8 @@ from timesheet.model.log import Log
 
 class Integration(Base):
     id            = Column(Integer, primary_key=True)
-    discriminator = Column('service', String(50))
-    name          = Column(String(255))
+    discriminator = Column('service', String(50), nullable=False)
+    name          = Column(String(255), nullable=False)
     token         = Column(String(255))
     _maps         = Column('maps', Text)
     user_id       = Column(UUID, ForeignKey('user.id'))
