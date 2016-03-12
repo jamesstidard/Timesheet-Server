@@ -17,22 +17,22 @@ def test_authenticate_password_fail():
     assert user.authenticate('wrong')
 
 
-def change_password_success():
+def test_change_password_success():
     new_password = 'NEW'
     user = User(username='james', password=PASSWORD)
-    assert user.change_password(PASSWORD, new_password)
+    assert user.change_password(PASSWORD, new_password=new_password)
 
     assert user.authenticate(new_password)
 
 
-def changed_password_failed():
+def test_changed_password_failed():
     new_password = 'NEW'
     user = User(username='james', password=PASSWORD)
-
+    print(user.password)
     with pytest.raises(ValueError):
-        user.change_password(PASSWORD, new_password)
+        user.change_password('wrong', new_password=new_password)
 
     with pytest.raises(ValueError):
         user.authenticate(new_password)
-
+    print(user.password)
     assert user.authenticate(PASSWORD)

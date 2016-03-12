@@ -50,8 +50,8 @@ class User(Base):
         self.password = updated_password
         return success
 
-    def change_password(self, old_password: str, new_password: str):
-        success, self.password = PWH.change_password(self.password, old_password, new_password)
+    def change_password(self, password: str, *, new_password: str):
+        success, self._password = PWH.change_password(self.password, password, new_password)
         if not success:
             raise ValueError('Incorrect password')
         return success
