@@ -5,3 +5,5 @@ python:
     - nightly
 install: make init
 script: make test
+notifications:
+    email: false
