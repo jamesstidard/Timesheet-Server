@@ -24,7 +24,7 @@ class BaseHandler(RequestHandler):
                     token = session.query(Token)\
                                    .filter(Token.id == token_id)\
                                    .one()
-                    token.auth(token_secret)
+                    token.authenticate(token_secret)
                     session.commit()
                     return token.user_id
             except ValueError:

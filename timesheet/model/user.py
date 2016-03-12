@@ -13,7 +13,7 @@ from timesheet.model.custom_types.uuid import UUID
 class User(Base):
     id           = Column(UUID, primary_key=True, default=uuid.uuid4)
     username     = Column(String(255), nullable=False, unique=True)
-    password     = Column(String(255), nullable=False)
+    _password    = Column('password', String(255), nullable=False)
     settings     = Column(Text, nullable=False, default="\{\}")
     tokens       = relationship('Token',
                                 uselist=True,
@@ -34,13 +34,24 @@ class User(Base):
                                 back_populates='user',
                                 cascade='all, delete-orphan')
 
-    def auth_password(self, password: str):
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, password):
+        self._password = PWH.create_password(password)
+
+    def authenticate(self, password: str=None):
         success, updated_password = PWH.validate_password(self.password, password)
         if not success:
             raise ValueError('Incorrect password')
 
         self.password = updated_password
+        return success
 
     def change_password(self, old_password: str, new_password: str):
         success, self.password = PWH.change_password(self.password, old_password, new_password)
+        if not success:
+            raise ValueError('Incorrect password')
         return success

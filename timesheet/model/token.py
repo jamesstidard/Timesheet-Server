@@ -30,7 +30,7 @@ class Token(Base):
         key  = uuid.uuid4().bytes
         return hmac.new(key, digestmod=sha256).hexdigest()
 
-    def auth(self, token: str):
+    def authenticate(self, token: str):
         success, updated_token = PWH.validate_password(self.value, token)
         if not success:
             raise ValueError('Incorrect token')

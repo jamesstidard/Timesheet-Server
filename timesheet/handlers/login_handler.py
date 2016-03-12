@@ -17,7 +17,7 @@ class LoginHandler(BaseHandler):
             try:
                 user = session.query(User)\
                               .filter(User.username == username).one()
-                user.auth_password(password)
+                user.authenticate(password)
                 session.commit()
             except ValueError:
                 raise HTTPInputError('Incorrect username or password')
