@@ -1,4 +1,5 @@
 from tornado.httputil import HTTPInputError
+from sqlalchemy.orm.exc import NoResultFound
 
 from timesheet.handlers.base_handler import BaseHandler
 from timesheet.model.user import User
@@ -19,7 +20,7 @@ class LoginHandler(BaseHandler):
                               .filter(User.username == username).one()
                 user.authenticate(password)
                 session.commit()
-            except ValueError:
+            except (NoResultFound, ValueError):
                 raise HTTPInputError('Incorrect username or password')
             else:
                 self.set_secure_cookie('user_id', user.id)
