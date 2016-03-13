@@ -46,7 +46,7 @@ class BaseHandler(RequestHandler):
             origin = o.scheme + "://" + o.hostname
             if o.port:
                 origin = "{}:{}".format(origin, o.port)
-            if origin in self.cors_origin:
+            if origin in self.origin_whitelist:
                 return origin
 
     def write(self, chunk):
