@@ -89,7 +89,7 @@ class BaseHandler(RequestHandler):
         if origin in self.origin_whitelist:
             logging.info('entered header setting')
             self.set_header("Access-Control-Allow-Origin", origin)
-            self.set_header('Access-Control-Allow-Methods', 'POST,OPTIONS')
+            self.set_header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
             self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Key, Cache-Control')
             self.set_header('Access-Control-Max-Age', 3000)
             self.set_status(204)
