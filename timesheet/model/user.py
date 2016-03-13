@@ -1,4 +1,5 @@
 import uuid
+import json
 
 from sqlalchemy.types import String, Text
 from sqlalchemy.schema import Column
@@ -14,7 +15,7 @@ class User(Base):
     id           = Column(UUID, primary_key=True, default=uuid.uuid4)
     username     = Column(String(255), nullable=False, unique=True)
     _password    = Column('password', String(255), nullable=False)
-    settings     = Column(Text, nullable=False, default="\{\}")
+    settings     = Column(Text, nullable=False, default="{}")
     tokens       = relationship('Token',
                                 uselist=True,
                                 primaryjoin='User.id==Token.user_id',
@@ -61,5 +62,5 @@ class User(Base):
         return {
             'id': str(self.id),
             'username': self.username,
-            'settings': self.settings
+            'settings': json.loads(self.settings)
         }
