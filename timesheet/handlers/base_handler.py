@@ -87,7 +87,7 @@ class BaseHandler(RequestHandler):
 
     def options(self, path=None):
         origin = self.get_request_origin()
-        logging.info('options call from origin {} for whitelist'.format(origin, self.origin_whitelist))
+        logging.info('options call from origin {} for {}'.format(origin, self.origin_whitelist))
         if origin in self.origin_whitelist:
             logging.info('entered header setting')
             self.set_header("Access-Control-Allow-Origin", origin)
