@@ -1,5 +1,5 @@
 from timesheet.model.log import Log
-from timesheet.integrations.zoho.utils import ZohoResource
+from timesheet.integrations.utils import ZohoResource
 
 
 class ZohoSupportLog(ZohoResource, Log):
