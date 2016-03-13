@@ -1,5 +1,5 @@
 import json
-import urllib
+import urlparse
 
 from tornado.web import RequestHandler, MissingArgumentError
 
@@ -32,18 +32,23 @@ class BaseHandler(RequestHandler):
                 raise MissingArgumentError('Not already logged in or incorrect\
                                             auth id and token provided.')
 
+    def get_origin_whitelist(self):
+        return self.control.settings.get('cors_origins')
+
+    def get_request_origin(self):
+        url = self.request.headers.get("Referer")
+        if url:
+            o = urlparse(url)
+            origin = o.scheme + "://" + o.hostname
+            if o.port:
+                origin = "{}:{}".format(origin, o.port)
+            if origin in self.cors_origin:
+                return origin
+
     def write(self, chunk):
         super().write({
             'result': chunk
         })
-
-    def set_default_headers(self):
-        origin = self.request.headers.get('Origin')
-
-        self.set_header('Access-Control-Allow-Origin', origin)
-        self.set_header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
-        self.set_header('Access-Control-Allow-Headers', 'Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control')
-        self.set_header("Access-Control-Allow-Credentials", "true")
 
     def prepare(self):
         content_type = self.request.headers.get('Content-Type')
@@ -75,3 +80,15 @@ class BaseHandler(RequestHandler):
                 raise MissingArgumentError(name)
             else:
                 return default
+
+    def options(self, path=None):
+        origin = self.get_request_origin()
+        if origin in self.cors_origin:
+            self.set_header("Access-Control-Allow-Origin", origin)
+            self.set_header('Access-Control-Allow-Methods', 'POST,OPTIONS')
+            self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Key, Cache-Control')
+            self.set_header('Access-Control-Max-Age', 3000)
+            self.set_status(204)
+            self.finish()
+        else:
+            super().options()
