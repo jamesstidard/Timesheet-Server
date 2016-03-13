@@ -37,10 +37,11 @@ class BaseHandler(RequestHandler):
             'result': chunk
         })
 
-    def prepare(self):
+    def set_default_headers(self):
         origin = self.request.headers.get('Origin')
         self.set_header('Access-Control-Allow-Origin', origin)
 
+    def prepare(self):
         content_type = self.request.headers.get('Content-Type')
 
         if content_type == 'application/json' and self.request.body != b'':
