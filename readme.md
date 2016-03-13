@@ -1,4 +1,4 @@
-# Timesheet [![Build Status](https://travis-ci.org/JamesStidard/Timesheet-Server.svg?branch=master)](https://travis-ci.org/JamesStidard/Timesheet-Server)
+# Timesheet
 Unified endpoint for hours logging for multiple services, such as: Zoho Projects and Support.
 
 ## General Architecture

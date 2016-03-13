@@ -5,25 +5,24 @@ from sqlalchemy.types import String, Text, Integer, DateTime, BigInteger
 from sqlalchemy.orm import relationship
 
 from timesheet.model.base import Base
-from timesheet.model.custom_types.uuid import UUID
 from timesheet.utils.date_helpers import parse_unix_time, to_unix_time
 
 
 class Log(Base):
     id             = Column(Integer, primary_key=True)
-    discriminator  = Column('type', String(50), nullable=False)
+    discriminator  = Column('type', String(50))
     project_id     = Column(BigInteger)
     task           = Column(String(255))
     _start         = Column('start', DateTime, default=datetime.utcnow)
     _end           = Column('end', DateTime)
     notes          = Column(Text)
-    integration_id = Column(Integer, ForeignKey('integration.id'), nullable=False)
+    integration_id = Column(Integer, ForeignKey('integration.id'))
     integration    = relationship('Integration',
                                   uselist=False,
                                   primaryjoin='Log.integration_id==Integration.id',
                                   remote_side='Integration.id',
                                   back_populates='logs')
-    user_id        = Column(UUID, ForeignKey('user.id'), nullable=False)
+    user_id        = Column(Integer, ForeignKey('user.id'))
     user           = relationship('User',
                                   uselist=False,
                                   primaryjoin='Log.user_id==User.id',

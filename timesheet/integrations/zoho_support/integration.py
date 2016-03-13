@@ -3,7 +3,7 @@ from sqlalchemy.types import String
 
 from timesheet.model.integration import Integration
 from timesheet.integrations.zoho_support.log import ZohoSupportLog
-from timesheet.integrations.utils import HasRegion, HasPortal
+from timesheet.integrations.zoho.utils import HasRegion, HasPortal
 
 
 class ZohoSupportIntegration(HasRegion, HasPortal, Integration):
