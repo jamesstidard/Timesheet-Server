@@ -10,11 +10,7 @@ __author__ = 'James Stidard'
 
 class LoginHandler(BaseHandler):
 
-    def put(self, path):
-        origin = self.check_origin()
-        if origin in self.cors_origin:
-            self.set_header("Access-Control-Allow-Origin", origin)
-
+    def put(self):
         username = self.get_json_argument('username')
         password = self.get_json_argument('password')
 
