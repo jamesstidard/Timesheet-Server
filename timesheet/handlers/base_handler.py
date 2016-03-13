@@ -1,4 +1,5 @@
 import json
+import urllib
 
 from tornado.web import RequestHandler, MissingArgumentError
 
@@ -32,7 +33,7 @@ class BaseHandler(RequestHandler):
                                             auth id and token provided.')
 
     def write(self, chunk):
-        super(RequestHandler, self).write({
+        super().write({
             'result': chunk
         })
 
