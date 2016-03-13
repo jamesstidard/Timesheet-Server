@@ -59,7 +59,7 @@ class User(Base):
     @property
     def client_format(self):
         return {
-            'id': self.id,
+            'id': str(self.id),
             'username': self.username,
             'settings': self.settings
         }
