@@ -25,7 +25,9 @@ class BaseHandler(RequestHandler):
 
     def get_current_user(self):
         try:
-            return self.get_secure_cookie("user_id")
+            import logging
+            logging.info(self.get_secure_cookie("user_id"))
+            return self.get_secure_cookie("user_id").decode('utf-8')
         except TypeError:
             try:
                 token_id     = self.request.headers.get('token-id')
