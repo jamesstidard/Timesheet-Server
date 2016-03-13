@@ -16,7 +16,7 @@ from timesheet.model.custom_types.uuid import UUID
 class Token(Base):
     id      = Column(UUID, primary_key=True, default=uuid.uuid4)
     name    = Column(String(255), nullable=False)
-    value   = Column(String(255), nullable=False)
+    _value  = Column('value', String(255), nullable=False)
     created = Column(DateTime, nullable=False, default=func.now())
     user_id = Column(UUID, ForeignKey('user.id'), nullable=False)
     user    = relationship('User',
@@ -30,9 +30,18 @@ class Token(Base):
         key  = uuid.uuid4().bytes
         return hmac.new(key, digestmod=sha256).hexdigest()
 
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        self._value = PWH.create_password(value)
+
     def authenticate(self, token: str):
         success, updated_token = PWH.validate_password(self.value, token)
         if not success:
             raise ValueError('Incorrect token')
 
-        self.token = updated_token
+        self._value = updated_token
+        return True
