@@ -28,11 +28,11 @@ def test_change_password_success():
 def test_changed_password_failed():
     new_password = 'NEW'
     user = User(username='james', password=PASSWORD)
-    print(user.password)
+
     with pytest.raises(ValueError):
         user.change_password('wrong', new_password=new_password)
 
     with pytest.raises(ValueError):
         user.authenticate(new_password)
-    print(user.password)
+
     assert user.authenticate(PASSWORD)
