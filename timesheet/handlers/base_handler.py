@@ -38,7 +38,8 @@ class BaseHandler(RequestHandler):
         })
 
     def prepare(self):
-        self.set_header('Access-Control-Allow-Origin', '*')
+        origin = self.request.headers.get('Origin')
+        self.set_header('Access-Control-Allow-Origin', origin)
 
         content_type = self.request.headers.get('Content-Type')
 
