@@ -22,7 +22,7 @@ class LoginHandler(BaseHandler):
             except ValueError:
                 raise HTTPInputError('Incorrect username or password')
             else:
-                self.set_secure_cookie('user_id', str(user.id))
+                self.set_secure_cookie('user_id', user.id)
                 self.write('Success')
 
     @user_session
