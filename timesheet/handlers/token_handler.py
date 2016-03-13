@@ -1,17 +1,20 @@
 from tornado.httputil import HTTPInputError
 
+from utilise.password_helper import PasswordHelper as PWH
+
 from timesheet.handlers.base_handler import BaseHandler
 from timesheet.model.user import User
-from timesheet.utils.user_session import user_session
+from timesheet.model.token import Token
 
 __author__ = 'James Stidard'
 
 
-class LoginHandler(BaseHandler):
+class TokenHandler(BaseHandler):
 
     def put(self):
         username = self.get_json_argument('username')
         password = self.get_json_argument('password')
+        name     = self.get_json_argument('name')
 
         with self.control.session as session:
             try:
@@ -22,9 +25,16 @@ class LoginHandler(BaseHandler):
             except ValueError:
                 raise HTTPInputError('Incorrect username or password')
             else:
-                self.set_secure_cookie('user_id', str(user.id))
-                self.write('Success')
+                secret = Token.create_secret()
+                token  = Token(
+                    name=name,
+                    value=PWH.create_password(secret),
+                    user=user
+                )
+                session.add(token)
+                session.commit()
 
-    @user_session
-    def delete(self, session, user):
-        self.clear_cookie('user_id')
+                self.write({
+                    "token_id": token.id,
+                    "token_secret": secret
+                })
