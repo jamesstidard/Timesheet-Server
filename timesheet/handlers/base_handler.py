@@ -13,6 +13,10 @@ __author__ = 'James Stidard'
 class BaseHandler(RequestHandler):
 
     @property
+    def origin_whitelist(self):
+        return self.application.settings.get('cors_origins')
+
+    @property
     def control(self):
         return self.application.settings.get('control')
 
@@ -34,10 +38,6 @@ class BaseHandler(RequestHandler):
                 raise MissingArgumentError('Not already logged in or incorrect\
                                             auth id and token provided.')
 
-    @property
-    def origin_whitelist(self):
-        return self.control.settings.get('cors_origins')
-
     def get_request_origin(self):
         logging.info('get request origins')
         url = self.request.headers.get("Referer")
@@ -46,7 +46,7 @@ class BaseHandler(RequestHandler):
             origin = o.scheme + "://" + o.hostname
             if o.port:
                 origin = "{}:{}".format(origin, o.port)
-            if origin in self.origin_whitelist:
+            else:
                 return origin
 
     def write(self, chunk):
