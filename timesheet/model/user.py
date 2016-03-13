@@ -47,7 +47,7 @@ class User(Base):
         if not success:
             raise ValueError('Incorrect password')
 
-        self.password = updated_password
+        self._password = updated_password
         return success
 
     def change_password(self, password: str, *, new_password: str):

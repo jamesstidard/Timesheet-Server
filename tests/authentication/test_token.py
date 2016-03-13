@@ -54,8 +54,7 @@ def test_value_remains_same_after_use(secret, token):
 
     shuffle(attempts)
 
-    def not_changed(value):
-        return token.value == value
+    initial = token.value
 
     for attempt in attempts:
         print('Authenticating with password {}'.format(attempt))
@@ -64,4 +63,4 @@ def test_value_remains_same_after_use(secret, token):
         except ValueError:
             pass
         finally:
-            assert not_changed(token.value)
+            assert initial == token.value

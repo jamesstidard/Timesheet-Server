@@ -10,11 +10,13 @@ __author__ = 'James Stidard'
 
 class LoginHandler(BaseHandler):
 
+    def initialize(self):
+        super(LoginHandler, self).initialize()
+
     def put(self):
         username = self.get_json_argument('username')
         password = self.get_json_argument('password')
-        import logging
-        logging.info('username: {}, password: {}'.format(username, password))
+        
         with self.control.session as session:
             try:
                 user = session.query(User)\
@@ -24,7 +26,7 @@ class LoginHandler(BaseHandler):
             except (NoResultFound, ValueError):
                 raise HTTPInputError('Incorrect username or password')
             else:
-                self.set_secure_cookie('user_id', user.id)
+                self.set_secure_cookie('user_id', str(user.id))
                 self.write('Success')
 
     @user_session

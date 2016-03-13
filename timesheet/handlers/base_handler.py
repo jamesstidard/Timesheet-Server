@@ -12,7 +12,8 @@ __author__ = 'James Stidard'
 class BaseHandler(RequestHandler):
 
     def initialize(self):
-        self.request_origin = self.clean_request_origin()
+        import logging
+        logging.info('initialise')
 
     @property
     def origin_whitelist(self):
@@ -40,7 +41,8 @@ class BaseHandler(RequestHandler):
                 raise MissingArgumentError('Not already logged in or incorrect\
                                             auth id and token provided.')
 
-    def clean_request_origin(self):
+    @property
+    def request_origin(self):
         url = self.request.headers.get("Referer")
         if url:
             o = urlparse(url)
