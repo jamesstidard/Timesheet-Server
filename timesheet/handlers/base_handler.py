@@ -39,6 +39,7 @@ class BaseHandler(RequestHandler):
         return self.control.settings.get('cors_origins')
 
     def get_request_origin(self):
+        logging.info('get request origins')
         url = self.request.headers.get("Referer")
         if url:
             o = urlparse(url)
