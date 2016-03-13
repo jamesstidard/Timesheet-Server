@@ -2,6 +2,7 @@ from timesheet.model.base import Base
 from timesheet.model.integration import Integration
 from timesheet.model.log import Log
 from timesheet.model.user import User
+from timesheet.model.token import Token
 
 from timesheet.integrations.zoho_projects.integration import ZohoProjectsIntegration
 from timesheet.integrations.zoho_projects.log import ZohoProjectsLog

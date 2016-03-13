@@ -1,17 +1,26 @@
-from sqlalchemy.types import String, Integer
+import uuid
+
+from sqlalchemy.types import String, Text
 from sqlalchemy.schema import Column
 from sqlalchemy.orm import relationship
 
 from utilise.password_helper import PasswordHelper as PWH
 
 from timesheet.model.base import Base
+from timesheet.model.custom_types.uuid import UUID
 
 
 class User(Base):
-    id           = Column(Integer, primary_key=True)
-    username     = Column(String(255))
-    password     = Column(String(255))
-    token        = Column(String(255))
+    id           = Column(UUID, primary_key=True, default=uuid.uuid4)
+    username     = Column(String(255), nullable=False, unique=True)
+    _password    = Column('password', String(255), nullable=False)
+    settings     = Column(Text, nullable=False, default="\{\}")
+    tokens       = relationship('Token',
+                                uselist=True,
+                                primaryjoin='User.id==Token.user_id',
+                                remote_side='Token.user_id',
+                                back_populates='user',
+                                cascade='all, delete-orphan')
     integrations = relationship('Integration',
                                 uselist=True,
                                 primaryjoin='User.id==Integration.user_id',
@@ -25,20 +34,24 @@ class User(Base):
                                 back_populates='user',
                                 cascade='all, delete-orphan')
 
-    def auth_password(self, password: str):
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, password):
+        self._password = PWH.create_password(password)
+
+    def authenticate(self, password: str=None):
         success, updated_password = PWH.validate_password(self.password, password)
         if not success:
             raise ValueError('Incorrect password')
 
         self.password = updated_password
+        return success
 
-    def auth_token(self, token: str):
-        success, updated_token = PWH.validate_password(self.token, token)
+    def change_password(self, password: str, *, new_password: str):
+        success, self._password = PWH.change_password(self.password, password, new_password)
         if not success:
-            raise ValueError('Incorrect token')
-
-        self.token = updated_token
-
-    def change_password(self, old_password: str, new_password: str):
-        success, self.password = PWH.change_password(self.password, old_password, new_password)
+            raise ValueError('Incorrect password')
         return success
