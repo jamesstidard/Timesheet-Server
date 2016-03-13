@@ -1,6 +1,5 @@
 import json
 from urllib.parse import urlparse
-import logging
 
 from tornado.web import RequestHandler, MissingArgumentError
 from tornado.web import HTTPError
@@ -11,6 +10,9 @@ __author__ = 'James Stidard'
 
 
 class BaseHandler(RequestHandler):
+
+    def initialize(self):
+        self.request_origin = self.clean_request_origin()
 
     @property
     def origin_whitelist(self):
@@ -38,7 +40,7 @@ class BaseHandler(RequestHandler):
                 raise MissingArgumentError('Not already logged in or incorrect\
                                             auth id and token provided.')
 
-    def get_request_origin(self):
+    def clean_request_origin(self):
         url = self.request.headers.get("Referer")
         if url:
             o = urlparse(url)
@@ -84,16 +86,12 @@ class BaseHandler(RequestHandler):
                 return default
 
     def set_default_headers(self):
-        origin = self.get_request_origin()
-        if origin in self.origin_whitelist:
-            self.set_header("Access-Control-Allow-Origin", origin)
+        if self.request_origin in self.origin_whitelist:
+            self.set_header("Access-Control-Allow-Origin", self.request_origin)
 
     def options(self):
-        origin = self.get_request_origin()
-        logging.info('options call from origin {} for {}'.format(origin, self.origin_whitelist))
-        if origin in self.origin_whitelist:
-            logging.info('entered header setting')
-            self.set_header("Access-Control-Allow-Origin", origin)
+        if self.request_origin in self.origin_whitelist:
+            self.set_header("Access-Control-Allow-Origin", self.request_origin)
             self.set_header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
             self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Key, Cache-Control')
             self.set_header('Access-Control-Max-Age', 3000)
