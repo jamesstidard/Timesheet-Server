@@ -55,3 +55,11 @@ class User(Base):
         if not success:
             raise ValueError('Incorrect password')
         return success
+
+    @property
+    def client_format(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'settings': self.settings
+        }
