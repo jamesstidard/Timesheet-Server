@@ -51,8 +51,8 @@ def test_password_not_stored_plaintext(user):
 
 
 def test_value_remains_same_after_use(user):
-    correct   = [PASSWORD] * 100
-    incorrect = ['wrong'] * 100
+    correct   = [PASSWORD] * 10
+    incorrect = ['wrong'] * 10
     attempts  = correct + incorrect
 
     shuffle(attempts)
