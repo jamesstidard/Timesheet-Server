@@ -25,10 +25,8 @@ class BaseHandler(RequestHandler):
 
     def get_current_user(self):
         try:
-            import logging
-            logging.info(self.get_secure_cookie("user_id"))
             return self.get_secure_cookie("user_id").decode('utf-8')
-        except TypeError:
+        except AttributeError:
             try:
                 token_id     = self.request.headers.get('token-id')
                 token_secret = self.request.headers.get('token-secret')
@@ -97,6 +95,7 @@ class BaseHandler(RequestHandler):
     def options(self):
         if self.request_origin in self.origin_whitelist:
             self.set_header("Access-Control-Allow-Origin", self.request_origin)
+            self.set_header('Access-Control-Allow-Credentials', 'true')
             self.set_header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
             self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Key, Cache-Control')
             self.set_header('Access-Control-Max-Age', 3000)
