@@ -13,7 +13,8 @@ class LoginHandler(BaseHandler):
     def put(self):
         username = self.get_json_argument('username')
         password = self.get_json_argument('password')
-
+        import logging
+        logging.info('username: {}, password: {}'.format(username, password))
         with self.control.session as session:
             try:
                 user = session.query(User)\
