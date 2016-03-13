@@ -40,6 +40,7 @@ class BaseHandler(RequestHandler):
     def set_default_headers(self):
         origin = self.request.headers.get('Origin')
         self.set_header('Access-Control-Allow-Origin', origin)
+        self.set_header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
 
     def prepare(self):
         content_type = self.request.headers.get('Content-Type')
