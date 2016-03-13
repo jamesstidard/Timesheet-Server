@@ -1,8 +1,8 @@
 language: python
 python:
 - '3.5'
-- 3.5-dev
-- nightly
+- '3.5-dev'
+- 'nightly'
 install: make init
 script: make test
 deploy:
@@ -12,5 +12,7 @@ deploy:
   app:
     master: zoho-timesheet
     dev: zoho-timesheet-dev
+  on:
+      python: '3.5'
 notifications:
   email: false
