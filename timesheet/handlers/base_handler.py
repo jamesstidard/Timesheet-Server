@@ -38,6 +38,8 @@ class BaseHandler(RequestHandler):
         })
 
     def prepare(self):
+        self.set_header('Access-Control-Allow-Origin', '*')
+
         content_type = self.request.headers.get('Content-Type')
 
         if content_type == 'application/json' and self.request.body != b'':
