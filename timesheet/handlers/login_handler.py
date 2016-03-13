@@ -10,10 +10,7 @@ __author__ = 'James Stidard'
 
 class LoginHandler(BaseHandler):
 
-    def initialize(self):
-        super(LoginHandler, self).initialize()
-
-    def put(self):
+    def post(self):
         username = self.get_json_argument('username')
         password = self.get_json_argument('password')
 
