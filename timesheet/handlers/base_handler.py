@@ -92,6 +92,7 @@ class BaseHandler(RequestHandler):
     def set_default_headers(self):
         if self.request_origin in self.origin_whitelist:
             self.set_header("Access-Control-Allow-Origin", self.request_origin)
+            self.set_header('Access-Control-Allow-Credentials', 'true')
 
     def options(self):
         if self.request_origin in self.origin_whitelist:

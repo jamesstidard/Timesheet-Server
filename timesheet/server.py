@@ -58,7 +58,6 @@ def main():
     application = Application(handlers, **settings)
 
     application.listen(int(port))
-    logging.info('db: %s', db_url)
     logging.info('listening on port %s', port)
     if debug:
         logging.info('running in debug mode')
