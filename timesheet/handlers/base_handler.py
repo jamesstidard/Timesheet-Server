@@ -39,15 +39,13 @@ class BaseHandler(RequestHandler):
                                             auth id and token provided.')
 
     def get_request_origin(self):
-        logging.info('get request origins')
         url = self.request.headers.get("Referer")
         if url:
             o = urlparse(url)
             origin = o.scheme + "://" + o.hostname
             if o.port:
                 origin = "{}:{}".format(origin, o.port)
-            else:
-                return origin
+            return origin
 
     def write(self, chunk):
         super().write({
