@@ -1,7 +1,9 @@
 import json
 from urlparse import urlparse
+import logging
 
 from tornado.web import RequestHandler, MissingArgumentError
+from tornado.web import HTTPError
 
 from timesheet.model.token import Token
 
@@ -32,7 +34,8 @@ class BaseHandler(RequestHandler):
                 raise MissingArgumentError('Not already logged in or incorrect\
                                             auth id and token provided.')
 
-    def get_origin_whitelist(self):
+    @property
+    def origin_whitelist(self):
         return self.control.settings.get('cors_origins')
 
     def get_request_origin(self):
@@ -83,7 +86,9 @@ class BaseHandler(RequestHandler):
 
     def options(self, path=None):
         origin = self.get_request_origin()
-        if origin in self.cors_origin:
+        logging.info('options call from origin {} for whitelist'.format(origin, self.origin_whitelist))
+        if origin in self.origin_whitelist:
+            logging.info('entered header setting')
             self.set_header("Access-Control-Allow-Origin", origin)
             self.set_header('Access-Control-Allow-Methods', 'POST,OPTIONS')
             self.set_header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Key, Cache-Control')
@@ -91,4 +96,4 @@ class BaseHandler(RequestHandler):
             self.set_status(204)
             self.finish()
         else:
-            super().options()
+            raise HTTPError(403)
