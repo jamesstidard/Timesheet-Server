@@ -18,8 +18,8 @@ class BaseHandler(RequestHandler):
             return int(self.get_secure_cookie("user_id"))
         except TypeError:
             try:
-                token_id     = self.request.headers.get('token_id')
-                token_secret = self.request.headers.get('token_secret')
+                token_id     = self.request.headers.get('token-id')
+                token_secret = self.request.headers.get('token-secret')
                 with self.control.session as session:
                     token = session.query(Token)\
                                    .filter(Token.id == token_id)\
@@ -32,7 +32,7 @@ class BaseHandler(RequestHandler):
                                             auth id and token provided.')
 
     def write(self, chunk):
-        super().write({
+        super(RequestHandler, self).write({
             'result': chunk
         })
 

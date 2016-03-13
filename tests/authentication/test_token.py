@@ -48,8 +48,8 @@ def test_authenticate_password_fail(token):
 
 
 def test_value_remains_same_after_use(secret, token):
-    correct   = [secret] * 100
-    incorrect = ['wrong'] * 100
+    correct   = [secret] * 10
+    incorrect = ['wrong'] * 10
     attempts  = correct + incorrect
 
     shuffle(attempts)
