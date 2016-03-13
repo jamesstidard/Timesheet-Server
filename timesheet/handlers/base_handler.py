@@ -1,5 +1,5 @@
 import json
-import urlparse
+from urlparse import urlparse
 
 from tornado.web import RequestHandler, MissingArgumentError
 
