@@ -8,6 +8,7 @@ from tornado.web import Application
 
 from timesheet.control import Control
 from timesheet.handlers.login_handler import LoginHandler
+from timesheet.handlers.token_handler import TokenHandler
 from timesheet.handlers.projects_handler import ProjectsHandler
 from timesheet.handlers.log_handler import LogHandler
 from timesheet.utils.orm_utils import heroku_db_url
@@ -37,6 +38,7 @@ def main():
 
     handlers = [
         (r"/v1/rpc/login/?", LoginHandler),
+        (r"/v1/resources/tokens/?", TokenHandler),
         (r"/v1/resources/projects/?", ProjectsHandler),
         (r"/v1/resources/logs/?", LogHandler),
     ]

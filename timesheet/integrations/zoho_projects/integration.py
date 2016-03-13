@@ -1,6 +1,6 @@
 from timesheet.model.integration import Integration
 from timesheet.integrations.zoho_projects.log import ZohoProjectsLog
-from timesheet.integrations.zoho.utils import HasRegion, HasPortal
+from timesheet.integrations.utils import HasRegion, HasPortal
 
 
 class ZohoProjectsIntegration(HasRegion, HasPortal, Integration):
