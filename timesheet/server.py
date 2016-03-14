@@ -7,7 +7,7 @@ from tornado.options import parse_command_line, define, options
 from tornado.web import Application
 
 from timesheet.control import Control
-from timesheet.handlers.login_handler import LoginHandler
+from timesheet.handlers.sign_in_handler import SignInHandler
 from timesheet.handlers.user_handler import UserHandler
 from timesheet.handlers.token_handler import TokenHandler
 from timesheet.handlers.projects_handler import ProjectsHandler
@@ -42,7 +42,7 @@ def main():
         raise ValueError('Trying to use debug cookie for production.')
 
     handlers = [
-        (r'/v1/rpc/login/?', LoginHandler),
+        (r'/v1/rpc/sign-in/?', SignInHandler),
         (r'/v1/resources/users/?', UserHandler),
         (r'/v1/resources/tokens/?', TokenHandler),
         (r'/v1/resources/projects/?', ProjectsHandler),

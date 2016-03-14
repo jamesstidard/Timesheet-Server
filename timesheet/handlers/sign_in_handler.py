@@ -8,7 +8,7 @@ from timesheet.utils.user_session import user_session
 __author__ = 'James Stidard'
 
 
-class LoginHandler(BaseHandler):
+class SignInHandler(BaseHandler):
 
     def post(self):
         username = self.get_json_argument('username')
