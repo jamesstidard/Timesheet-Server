@@ -35,14 +35,14 @@ class LogHandler(BaseHandler):
             integration=integration
         )
         session.add(log)
-        session.commit()
+        session.flush()
 
         try:
             log.zoho_id = await insert_log(integration)
         except IncompleteLogException:
-            pass
+            # Only IncompleteLogException and no exceptions are successes.
+            self.write(log.client_format)
         else:
-            session.commit()
             self.write(log.client_format)
 
     @async_user_session
@@ -57,6 +57,8 @@ class LogHandler(BaseHandler):
                 value = self.get_json_argument(property_key)
                 log.__setattr__(property_key, value)
 
+        session.flush()
+
         if not log.zoho_id:
             try:
                 log.zoho_id = await insert_log(log)
@@ -66,10 +68,9 @@ class LogHandler(BaseHandler):
             try:
                 log.zoho_id = await update_log(log)
             except IncompleteLogException:
-                await delete_log(log)
+                log.zoho_id = await delete_log(log)  # Set zoho_id to None
                 pass
 
-        session.commit()
         self.write(log.client_format)
 
     @async_user_session
@@ -83,6 +84,6 @@ class LogHandler(BaseHandler):
             await delete_log(log)
 
         session.delete(log)
-        session.commit()
+        session.flush()
 
         self.write('Success')

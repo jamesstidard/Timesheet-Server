@@ -16,5 +16,5 @@ class UserHandler(BaseHandler):
     #             value = self.get_json_argument(property_key, current)
     #             user.__setattr__(property_key, value)
     #
-    #     session.commit()
+    #     session.flush()
     #     self.write(user.client_format)
