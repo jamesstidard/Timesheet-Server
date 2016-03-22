@@ -1,4 +1,4 @@
-from tornado.httputil import HTTPInputError
+from tornado.web import HTTPError
 
 from utilise.password_helper import PasswordHelper as PWH
 
@@ -23,7 +23,7 @@ class TokenHandler(BaseHandler):
                 user.authenticate(password)
                 session.commit()
             except ValueError:
-                raise HTTPInputError('Incorrect username or password')
+                raise HTTPError(400, reason='Incorrect username or password.')
             else:
                 secret = Token.create_secret()
                 token  = Token(

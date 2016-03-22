@@ -1,4 +1,5 @@
 import json
+from json.decoder import JSONDecodeError
 from urllib.parse import urlparse
 
 from tornado.web import RequestHandler, MissingArgumentError
@@ -57,10 +58,10 @@ class BaseHandler(RequestHandler):
         })
 
     def prepare(self):
-        content_type = self.request.headers.get('Content-Type')
-
-        if content_type == 'application/json' and self.request.body != b'':
+        try:
             self.json_arguments = json.loads(self.request.body.decode('utf-8'))
+        except JSONDecodeError:
+            self.json_arguments = {}
 
     def get_json_argument(self,
                           name: str,
