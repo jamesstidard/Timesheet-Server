@@ -57,8 +57,7 @@ def test_value_remains_same_after_use(user):
 
     shuffle(attempts)
 
-    def not_changed(value):
-        return user.password == value
+    initial = user.password
 
     for attempt in attempts:
         print('Authenticating with password {}'.format(attempt))
@@ -67,4 +66,4 @@ def test_value_remains_same_after_use(user):
         except ValueError:
             pass
         finally:
-            assert not_changed(user.password)
+            assert user.password == initial

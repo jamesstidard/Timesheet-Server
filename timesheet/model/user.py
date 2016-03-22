@@ -1,4 +1,5 @@
 import uuid
+import json
 
 from sqlalchemy.types import String, Text
 from sqlalchemy.schema import Column
@@ -14,7 +15,7 @@ class User(Base):
     id           = Column(UUID, primary_key=True, default=uuid.uuid4)
     username     = Column(String(255), nullable=False, unique=True)
     _password    = Column('password', String(255), nullable=False)
-    settings     = Column(Text, nullable=False, default="\{\}")
+    settings     = Column(Text, nullable=False, default='{"web": {}, "osx":{}, "ios":{}}')
     tokens       = relationship('Token',
                                 uselist=True,
                                 primaryjoin='User.id==Token.user_id',
@@ -47,7 +48,7 @@ class User(Base):
         if not success:
             raise ValueError('Incorrect password')
 
-        self.password = updated_password
+        self._password = updated_password
         return success
 
     def change_password(self, password: str, *, new_password: str):
@@ -55,3 +56,11 @@ class User(Base):
         if not success:
             raise ValueError('Incorrect password')
         return success
+
+    @property
+    def client_format(self):
+        return {
+            'id': str(self.id),
+            'username': self.username,
+            'settings': json.loads(self.settings)
+        }
