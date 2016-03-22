@@ -40,10 +40,9 @@ class LogHandler(BaseHandler):
         try:
             log.zoho_id = await insert_log(integration)
         except IncompleteLogException:
-            # Only IncompleteLogException and no exceptions are successes.
-            self.write(log.client_format)
-        else:
-            self.write(log.client_format)
+            pass
+
+        self.write(log.client_format)
 
     @async_user_session
     async def put(self, user, session):
