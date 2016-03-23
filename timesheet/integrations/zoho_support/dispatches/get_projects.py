@@ -27,7 +27,8 @@ async def get_projects(integration):
     result  = unwrap_projects(result, mapping)
 
     for p in result:
-        p['integration_id'] = integration.id
+        p['id'] = str(p['id'])
         p['name'] = p['name'] + ' - ' + p.pop('subject')
+        p['integration_id'] = integration.id
 
     return [DotDict(p) for p in result]

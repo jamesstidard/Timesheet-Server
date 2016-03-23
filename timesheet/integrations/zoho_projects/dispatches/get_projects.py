@@ -25,6 +25,7 @@ async def get_projects(integration):
     result  = [DotDict(p) for p in result]
 
     for p in result:
+        p['id'] = str(p['id'])
         p['integration_id'] = integration.id
 
     return result
