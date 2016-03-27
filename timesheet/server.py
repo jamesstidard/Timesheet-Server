@@ -45,10 +45,10 @@ def main():
     handlers = [
         (r'/v1/rpc/sign-in/?', SignInHandler),
         (r'/v1/rpc/change-password/?', ChangePasswordHandler),
-        (r'/v1/resources/users/?', UserHandler),
-        (r'/v1/resources/tokens/?', TokenHandler),
-        (r'/v1/resources/projects/?', ProjectsHandler),
-        (r'/v1/resources/logs/?', LogHandler),
+        (r'/v1/resources/users?/?', UserHandler),
+        (r'/v1/resources/tokens?/?', TokenHandler),
+        (r'/v1/resources/projects?/?', ProjectsHandler),
+        (r'/v1/resources/logs?/?', LogHandler),
     ]
     settings = {
               'control': Control(db_url, pool_recycle=60),
