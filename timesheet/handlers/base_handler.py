@@ -58,12 +58,12 @@ class BaseHandler(RequestHandler):
         })
 
     def write_error(self, status_code, reason=None, exc_info=None, **kwargs):
-        if not reason and isinstance(exc_info[1], HTTPError):
+        if not reason and exc_info and isinstance(exc_info[1], HTTPError):
             _, exception, _ = exc_info
             reason = exception.reason
 
         elif status_code == 500:
-            reason = 'Internal Server Error'
+            reason = 'Internal server error'
 
         self.write(reason)
 

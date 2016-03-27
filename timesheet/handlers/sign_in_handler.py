@@ -20,7 +20,7 @@ class SignInHandler(BaseHandler):
                 user.authenticate(password)
                 session.commit()
             except (NoResultFound, ValueError):
-                raise HTTPError(400, reason='Incorrect username or password.')
+                raise HTTPError(400, reason='Incorrect username or password')
             else:
                 self.set_secure_cookie('user_id', str(user.id))
                 self.write(user.client_format)
