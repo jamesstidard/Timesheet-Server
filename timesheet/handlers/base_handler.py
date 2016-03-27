@@ -2,10 +2,11 @@ import json
 from json.decoder import JSONDecodeError
 from urllib.parse import urlparse
 
-from tornado.web import RequestHandler, MissingArgumentError
+from tornado.web import RequestHandler
 from tornado.web import HTTPError
 
 from timesheet.model.token import Token
+from timesheet.utils.http_exceptions import MissingArgumentsError
 
 __author__ = 'James Stidard'
 
@@ -39,7 +40,7 @@ class BaseHandler(RequestHandler):
                     session.commit()
                     return token.user_id
             except ValueError:
-                raise MissingArgumentError('Not already logged in or incorrect\
+                raise MissingArgumentsError('Not already logged in or incorrect\
                                             auth id and token provided.')
 
     @property
@@ -57,6 +58,13 @@ class BaseHandler(RequestHandler):
             'result': chunk
         })
 
+    def write_error(self, status_code, reason=None, exc_info=None, **kwargs):
+        if not reason and exc_info:
+            _, exception, _ = exc_info
+            reason = exception.reason
+
+        self.write(reason)
+
     def prepare(self):
         try:
             self.json_arguments = json.loads(self.request.body.decode('utf-8'))
@@ -68,11 +76,39 @@ class BaseHandler(RequestHandler):
                           default=RequestHandler._ARG_DEFAULT):
         try:
             return self.json_arguments[name]
-        except KeyError:
+        except Exception:
             if default is RequestHandler._ARG_DEFAULT:
-                raise MissingArgumentError(name)
+                raise MissingArgumentsError(name)
             else:
                 return default
+
+    def get_json_arguments(self, *arguments, strict=False):
+        """
+        Arguments should either be a tuple with the structure
+        (arg_name, default) or just a str of the arguments name.
+
+        If a default is provided, the default will be returned if value for
+        argument doesn't exist. Otherwise, when no default is present, a
+        MissingArguemntsError exception will be raised.
+        """
+        results = []
+        missing = []
+
+        for argument in arguments:
+            if isinstance(argument, str):
+                argument = (argument, )  # Simple str arguments to tuple
+
+            try:
+                result = self.get_json_argument(*argument)
+            except MissingArgumentsError as exc:
+                missing.extend(exc.arg_names)
+            else:
+                results.append(result)
+
+        if missing:
+            raise MissingArgumentsError(*missing)
+        else:
+            return results
 
     def get_argument(self,
                      name: str,
@@ -82,9 +118,9 @@ class BaseHandler(RequestHandler):
         try:
             value = super().get_argument(name, strip=True)
             return cast(value) if cast else value
-        except MissingArgumentError:
+        except MissingArgumentsError:
             if default is RequestHandler._ARG_DEFAULT:
-                raise MissingArgumentError(name)
+                raise MissingArgumentsError(name)
             else:
                 return default
 

@@ -11,8 +11,7 @@ __author__ = 'James Stidard'
 class SignInHandler(BaseHandler):
 
     def post(self):
-        username = self.get_json_argument('username')
-        password = self.get_json_argument('password')
+        username, password = self.get_json_arguments('username', 'password')
 
         with self.control.session as session:
             try:
