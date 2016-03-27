@@ -3,7 +3,7 @@ from tornado.web import HTTPError
 from timesheet.utils.str_list import str_list
 
 
-class MissingArgumentsError(HTTPError):
+class ArgumentsError(HTTPError):
     """
     Exception raised by `BaseHandler` argument getters.
 
@@ -14,9 +14,25 @@ class MissingArgumentsError(HTTPError):
     def __init__(self, *arg_names):
         arg_names  = list(arg_names)
         arg_list   = str_list(*arg_names, quote=True)
-        single_arg = len(arg_names) == 1
-        message    = 'Missing argument' if single_arg else 'Missing arguments'
+        message    = self.message(*arg_names)
         message    = '{}: {}'.format(message, arg_list)
 
-        super(MissingArgumentsError, self).__init__(400, log_message=message, reason=message)
+        super(ArgumentsError, self).__init__(400, log_message=message, reason=message)
         self.arg_names = arg_names
+
+    def message(self, *arguments):
+        raise NotImplementedError()
+
+
+class MissingArgumentsError(ArgumentsError):
+
+    def message(self, *arguments):
+        single_arg = len(arguments) == 1
+        return 'Missing argument' if single_arg else 'Missing arguments'
+
+
+class UnknownArgumentsError(ArgumentsError):
+
+    def message(self, *arguments):
+        single_arg = len(arguments) == 1
+        return 'Unknown argument' if single_arg else 'Unknown arguments'

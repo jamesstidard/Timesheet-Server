@@ -6,7 +6,7 @@ from tornado.web import RequestHandler
 from tornado.web import HTTPError
 
 from timesheet.model.token import Token
-from timesheet.utils.http_exceptions import MissingArgumentsError
+from timesheet.utils.http_exceptions import MissingArgumentsError, UnknownArgumentsError
 
 __author__ = 'James Stidard'
 
@@ -82,7 +82,10 @@ class BaseHandler(RequestHandler):
             else:
                 return default
 
-    def get_json_arguments(self, *arguments, strict=False):
+    def unknown_json_arguments(self, *known_keys):
+        return [k for k in self.json_arguments.keys() if k not in known_keys]
+
+    def get_json_arguments(self, *arguments, allow_unknown=False):
         """
         Arguments should either be a tuple with the structure
         (arg_name, default) or just a str of the arguments name.
@@ -90,9 +93,14 @@ class BaseHandler(RequestHandler):
         If a default is provided, the default will be returned if value for
         argument doesn't exist. Otherwise, when no default is present, a
         MissingArguemntsError exception will be raised.
+
+        If allow_unknown is False, the JSON body will check and raise a
+        UnknownArgumentsError exception if any keys present are not in the
+        provided arguments.
         """
         results = []
         missing = []
+        unknown = self.unknown_json_arguments(*arguments)
 
         for argument in arguments:
             if isinstance(argument, str):
@@ -107,6 +115,8 @@ class BaseHandler(RequestHandler):
 
         if missing:
             raise MissingArgumentsError(*missing)
+        elif not allow_unknown and unknown:
+            raise UnknownArgumentsError(*unknown)
         else:
             return results
 
