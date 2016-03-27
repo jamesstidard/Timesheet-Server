@@ -2,14 +2,14 @@ from tornado.web import HTTPError
 
 from utilise.password_helper import PasswordHelper as PWH
 
-from timesheet.handlers.base_handler import BaseHandler
+from timesheet.handlers.resource_handler import ResourceHandler
 from timesheet.model.user import User
 from timesheet.model.token import Token
 
 __author__ = 'James Stidard'
 
 
-class TokenHandler(BaseHandler):
+class TokenHandler(ResourceHandler):
 
     def put(self):
         try:
