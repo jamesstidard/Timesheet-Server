@@ -53,11 +53,7 @@ class LogHandler(ResourceHandler):
                         .filter(Log.user_id == user.id,
                                 Log.id == log_id).one()
 
-        for property_key in ['task', 'start', 'end', 'billable', 'notes']:
-            if property_key in self.json_arguments:
-                value = self.get_json_argument(property_key)
-                log.__setattr__(property_key, value)
-
+        self._update_resource(log, 'task', 'start', 'end', 'billable', 'notes')
         session.flush()
 
         if not log.zoho_id:

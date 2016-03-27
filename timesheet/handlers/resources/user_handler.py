@@ -10,11 +10,5 @@ class UserHandler(ResourceHandler):
 
     @user_session
     def put(self, user, session):
-        for property_key in ['username', 'settings']:
-            if property_key in self.json_arguments:
-                current = getattr(user, property_key)
-                value   = self.get_json_argument(property_key, current)
-                setattr(user, property_key, value)
-
-        session.flush()
+        self._update_resource(user, 'username', 'settings')
         self.write(user.client_format)
