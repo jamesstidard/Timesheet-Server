@@ -58,7 +58,7 @@ class BaseHandler(RequestHandler):
         })
 
     def write_error(self, status_code, reason=None, exc_info=None, **kwargs):
-        if not reason and exc_info and isinstance(exc_info[1], HTTPError):
+        if not reason and exc_info and hasattr(exc_info[1], 'reason'):
             _, exception, _ = exc_info
             reason = exception.reason
 
