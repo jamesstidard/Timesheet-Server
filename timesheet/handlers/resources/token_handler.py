@@ -12,29 +12,36 @@ __author__ = 'James Stidard'
 class TokenHandler(BaseHandler):
 
     def put(self):
-        username = self.get_json_argument('username')
-        password = self.get_json_argument('password')
-        name     = self.get_json_argument('name')
+        try:
+            user_id = self.get_current_user()
+        except ValueError:
+            kwargs = self.get_json_arguments('username', 'password', 'name')
+        else:
+            kwargs = self.get_json_arguments('name')
 
         with self.control.session as session:
-            try:
-                user = session.query(User)\
-                              .filter(User.username == username).one()
-                user.authenticate(password)
-                session.commit()
-            except ValueError:
-                raise HTTPError(400, reason='Incorrect username or password.')
+            if user_id:
+                user = session.query(User).get(user_id)
             else:
-                secret = Token.create_secret()
-                token  = Token(
-                    name=name,
-                    value=PWH.create_password(secret),
-                    user=user
-                )
-                session.add(token)
-                session.commit()
+                try:
+                    user = session.query(User)\
+                                  .filter(User.username == kwargs.username)\
+                                  .one()
+                    user.authenticate(kwargs.password)
+                    session.commit()
+                except ValueError:
+                    raise HTTPError(400, reason='Incorrect username of password')
 
-                self.write({
-                    "token_id": token.id,
-                    "token_secret": secret
-                })
+            secret = Token.create_secret()
+            token  = Token(
+                name=kwargs.name,
+                value=PWH.create_password(secret),
+                user=user
+            )
+            session.add(token)
+            session.commit()
+
+            self.write({
+                "token_id": token.id,
+                "token_secret": secret
+            })

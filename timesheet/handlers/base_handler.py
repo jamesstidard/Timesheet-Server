@@ -87,7 +87,7 @@ class BaseHandler(RequestHandler):
     def unknown_json_arguments(self, *known_keys):
         return [k for k in self.json_arguments.keys() if k not in known_keys]
 
-    def get_json_arguments(self, *arguments, allow_unknown: bool=False):
+    def get_json_arguments(self, *arguments, allow_unknown: bool=True):
         """
         Get multiple arguements by key from JSON body.
 

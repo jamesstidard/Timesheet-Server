@@ -27,6 +27,7 @@ class LogHandler(BaseHandler):
             ('end', None),
             ('billable', True),
             ('notes', None),
+            allow_unknown=False,
         )
 
         integration_id = kwargs.pop('integration_id')
