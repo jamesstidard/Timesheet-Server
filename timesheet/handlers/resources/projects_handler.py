@@ -3,7 +3,7 @@ from itertools import chain
 from tornado.gen import multi
 from fuzzywuzzy import fuzz
 
-from timesheet.handlers.resources.base_handler import BaseHandler
+from timesheet.handlers.base_handler import BaseHandler
 from timesheet.utils.user_session import async_user_session
 from timesheet.dispatches.get_projects import get_projects
 

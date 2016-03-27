@@ -1,7 +1,7 @@
 from tornado.web import HTTPError
 from sqlalchemy.orm.exc import NoResultFound
 
-from timesheet.handlers.resources.base_handler import BaseHandler
+from timesheet.handlers.base_handler import BaseHandler
 from timesheet.model.user import User
 from timesheet.utils.user_session import user_session
 

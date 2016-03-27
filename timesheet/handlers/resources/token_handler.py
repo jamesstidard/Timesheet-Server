@@ -2,7 +2,7 @@ from tornado.web import HTTPError
 
 from utilise.password_helper import PasswordHelper as PWH
 
-from timesheet.handlers.resources.base_handler import BaseHandler
+from timesheet.handlers.base_handler import BaseHandler
 from timesheet.model.user import User
 from timesheet.model.token import Token
 
