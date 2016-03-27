@@ -6,7 +6,8 @@ from tornado.web import RequestHandler
 from tornado.web import HTTPError
 
 from timesheet.model.token import Token
-from timesheet.utils.http_exceptions import MissingArgumentsError, UnknownArgumentsError
+from timesheet.utils.http_exceptions import MissingArgumentsError
+from timesheet.utils.http_exceptions import UnknownArgumentsError
 
 __author__ = 'James Stidard'
 
@@ -103,7 +104,6 @@ class BaseHandler(RequestHandler):
         for argument in arguments:
             if isinstance(argument, str):
                 argument = (argument, )  # Simple str arguments to tuple
-
             try:
                 result = self.get_json_argument(*argument)
             except MissingArgumentsError as exc:
