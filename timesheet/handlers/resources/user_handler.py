@@ -1,8 +1,8 @@
-from timesheet.handlers.resource_handler import ResourceHandler
+from timesheet.handlers.base_handler import BaseHandler
 from timesheet.utils.user_session import user_session
 
 
-class UserHandler(ResourceHandler):
+class UserHandler(BaseHandler):
 
     @user_session
     def get(self, user, session):
@@ -13,7 +13,7 @@ class UserHandler(ResourceHandler):
         for property_key in ['username', 'settings']:
             if property_key in self.json_arguments:
                 current = getattr(user, property_key)
-                value   = self.get_json_argument(property_key, current)
+                value = self.get_json_argument(property_key, current)
                 setattr(user, property_key, value)
 
         session.flush()
