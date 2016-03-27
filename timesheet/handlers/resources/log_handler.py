@@ -1,6 +1,6 @@
 from timesheet.model.log import Log
 from timesheet.model.integration import Integration
-from timesheet.handlers.base_handler import BaseHandler
+from timesheet.handlers.resource_handler import ResourceHandler
 from timesheet.utils.user_session import async_user_session
 from timesheet.utils.log_exceptions import IncompleteLogException
 from timesheet.dispatches.insert_log import insert_log
@@ -10,7 +10,7 @@ from timesheet.dispatches.delete_log import delete_log
 __author__ = 'James Stidard'
 
 
-class LogHandler(BaseHandler):
+class LogHandler(ResourceHandler):
 
     @async_user_session
     async def get(self, user, session):

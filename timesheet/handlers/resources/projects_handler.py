@@ -3,14 +3,14 @@ from itertools import chain
 from tornado.gen import multi
 from fuzzywuzzy import fuzz
 
-from timesheet.handlers.base_handler import BaseHandler
+from timesheet.handlers.resource_handler import ResourceHandler
 from timesheet.utils.user_session import async_user_session
 from timesheet.dispatches.get_projects import get_projects
 
 __author__ = 'James Stidard'
 
 
-class ProjectsHandler(BaseHandler):
+class ProjectsHandler(ResourceHandler):
 
     @async_user_session
     async def get(self, user, _):
