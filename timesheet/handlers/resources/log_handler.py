@@ -1,6 +1,6 @@
 from timesheet.model.log import Log
 from timesheet.model.integration import Integration
-from timesheet.handlers.base_handler import BaseHandler
+from timesheet.handlers.resources.base_handler import BaseHandler
 from timesheet.utils.user_session import async_user_session
 from timesheet.utils.log_exceptions import IncompleteLogException
 from timesheet.dispatches.insert_log import insert_log

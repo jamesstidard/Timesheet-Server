@@ -7,11 +7,12 @@ from tornado.options import parse_command_line, define, options
 from tornado.web import Application
 
 from timesheet.control import Control
-from timesheet.handlers.sign_in_handler import SignInHandler
-from timesheet.handlers.user_handler import UserHandler
-from timesheet.handlers.token_handler import TokenHandler
-from timesheet.handlers.projects_handler import ProjectsHandler
-from timesheet.handlers.log_handler import LogHandler
+from timesheet.handlers.rpc.sign_in_handler import SignInHandler
+# from timesheet.handlers.rpc.change_password_handler import ChangePasswordHandler
+from timesheet.handlers.resources.user_handler import UserHandler
+from timesheet.handlers.resources.token_handler import TokenHandler
+from timesheet.handlers.resources.projects_handler import ProjectsHandler
+from timesheet.handlers.resources.log_handler import LogHandler
 from timesheet.utils.orm_utils import heroku_db_url
 
 DEBUG_COOKIE = 'timesheet-secret-please-dont-guess'

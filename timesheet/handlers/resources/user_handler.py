@@ -1,4 +1,4 @@
-from timesheet.handlers.base_handler import BaseHandler
+from timesheet.handlers.resources.base_handler import BaseHandler
 from timesheet.utils.user_session import user_session
 
 
