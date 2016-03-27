@@ -13,10 +13,6 @@ __author__ = 'James Stidard'
 
 class BaseHandler(RequestHandler):
 
-    def initialize(self):
-        import logging
-        logging.info('initialise')
-
     @property
     def origin_whitelist(self):
         return self.application.settings.get('cors_origins')
@@ -27,7 +23,7 @@ class BaseHandler(RequestHandler):
 
     def get_current_user(self):
         try:
-            return self.get_secure_cookie("user_id").decode('utf-8')
+            return self.get_secure_cookie('user_id').decode('utf-8')
         except AttributeError:
             try:
                 token_id     = self.request.headers.get('token-id')
@@ -40,8 +36,9 @@ class BaseHandler(RequestHandler):
                     session.commit()
                     return token.user_id
             except ValueError:
-                raise MissingArgumentsError('Not already logged in or incorrect\
-                                            auth id and token provided.')
+                raise MissingArgumentsError(
+                    "Not already logged in or incorrect\
+                    token-id and token-secret provided.")
 
     @property
     def request_origin(self):
@@ -85,8 +82,10 @@ class BaseHandler(RequestHandler):
     def unknown_json_arguments(self, *known_keys):
         return [k for k in self.json_arguments.keys() if k not in known_keys]
 
-    def get_json_arguments(self, *arguments, allow_unknown=False):
+    def get_json_arguments(self, *arguments, allow_unknown: bool=False):
         """
+        Get multiple arguements by key from JSON body.
+
         Arguments should either be a tuple with the structure
         (arg_name, default) or just a str of the arguments name.
 
@@ -100,7 +99,6 @@ class BaseHandler(RequestHandler):
         """
         results = []
         missing = []
-        unknown = self.unknown_json_arguments(*arguments)
 
         for argument in arguments:
             if isinstance(argument, str):
@@ -115,10 +113,13 @@ class BaseHandler(RequestHandler):
 
         if missing:
             raise MissingArgumentsError(*missing)
-        elif not allow_unknown and unknown:
-            raise UnknownArgumentsError(*unknown)
-        else:
-            return results
+
+        elif not allow_unknown:
+            unknown = self.unknown_json_arguments(*arguments)
+            if unknown:
+                raise UnknownArgumentsError(*unknown)
+
+        return results
 
     def get_argument(self,
                      name: str,
