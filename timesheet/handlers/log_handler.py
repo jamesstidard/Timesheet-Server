@@ -19,21 +19,22 @@ class LogHandler(BaseHandler):
 
     @async_user_session
     async def post(self, user, session):
-        integration_id = self.get_json_argument('integration_id')
+        kwargs = self.get_json_arguments(
+            ('integration_id'),
+            ('project_id'),
+            ('task'),
+            ('start', None),
+            ('end', None),
+            ('billable', True),
+            ('notes', None),
+        )
+
+        integration_id = kwargs.pop('integration_id')
         integration    = session.query(Integration)\
                                 .filter(Integration.user_id == user.id,
                                         Integration.id == integration_id).one()
 
-        log = integration.Log(
-            project_id=self.get_json_argument('project_id'),
-            task=self.get_json_argument('task'),
-            start=self.get_json_argument('start', None),
-            end=self.get_json_argument('end', None),
-            billable=self.get_json_argument('billable', True),
-            notes=self.get_json_argument('notes', None),
-            user=user,
-            integration=integration
-        )
+        log = integration.Log(user=user, integration=integration, **kwargs)
         session.add(log)
         session.flush()
 
