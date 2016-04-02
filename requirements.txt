@@ -4,6 +4,7 @@ SQLAlchemy<2.0.0
 tornado<5.0
 python-Levenshtein
 fuzzywuzzy<1.0
+multipledispatch
 flake8
 flake8-docstrings
 pytest

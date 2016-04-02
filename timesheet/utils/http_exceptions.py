@@ -17,7 +17,7 @@ class ArgumentsError(HTTPError):
         message    = self.message(*arg_names)
         message    = '{}: {}'.format(message, arg_list)
 
-        super(ArgumentsError, self).__init__(400, log_message=message, reason=message)
+        super(ArgumentsError, self).__init__(400, log_message=message, reason=message)  # noqa
         self.arg_names = arg_names
 
     def message(self, *arguments):
@@ -36,3 +36,10 @@ class UnknownArgumentsError(ArgumentsError):
     def message(self, *arguments):
         single_arg = len(arguments) == 1
         return 'Unknown argument' if single_arg else 'Unknown arguments'
+
+
+class IncorrectArgumentTypesError(ArgumentsError):
+
+    def message(self, *arguments):
+        single_arg = len(arguments) == 1
+        return 'Incorrect type for argument' if single_arg else 'Incorrect types for arguments'  # noqa
